@@ -1,0 +1,8 @@
+site_name: Notes
+nav:
+    - 'Maven':
+        - POM简介: Maven/Maven POM.md
+        - Profile简介: Maven/Maven Profile.md
+        - Maven概述: Maven/Maven概述.md
+        - Maven构建生命周期: Maven/Maven构建生命周期.md
+theme: readthedocs
