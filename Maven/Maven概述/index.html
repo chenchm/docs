@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>Maven概述 - Notes</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Maven\u6982\u8ff0";
+    var mkdocs_page_input_path = "Maven\\Maven\u6982\u8ff0.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Notes</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Maven</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Maven POM/">POM简介</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Maven Profile/">Profile简介</a>
+                </li>
+                <li class=" current">
+                    
+    <a class="current" href="./">Maven概述</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#_1">概述</a></li>
+    
+
+    <li class="toctree-l3"><a href="#maven">如何创建一个Maven项目</a></li>
+    
+
+    <li class="toctree-l3"><a href="#_2">如何编译源码</a></li>
+    
+
+    <li class="toctree-l3"><a href="#_3">如何编译测试源码并且运行单元测试</a></li>
+    
+
+    <li class="toctree-l3"><a href="#jar">如何生成一个JAR包并安装到本地仓库</a></li>
+    
+
+    <li class="toctree-l3"><a href="#_4">如何使用插件</a></li>
+    
+
+    <li class="toctree-l3"><a href="#jar_1">如何往JAR文件中添加资源文件</a></li>
+    
+
+    <li class="toctree-l3"><a href="#_5">如何替换资源文件中的引用值</a></li>
+    
+
+    <li class="toctree-l3"><a href="#_6">如何使用外部依赖</a></li>
+    
+
+    </ul>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Maven构建生命周期/">Maven构建生命周期</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Notes</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Maven &raquo;</li>
+        
+      
+    
+    <li>Maven概述</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h2 id="_1">概述</h2>
+<p>本文将以举例的方式对<code>Maven</code>常用部分进行说明。</p>
+<p><strong>索引</strong></p>
+<div class="toc">
+<ul>
+<li><a href="#_1">概述</a></li>
+<li><a href="#maven">如何创建一个Maven项目</a></li>
+<li><a href="#_2">如何编译源码</a></li>
+<li><a href="#_3">如何编译测试源码并且运行单元测试</a></li>
+<li><a href="#jar">如何生成一个JAR包并安装到本地仓库</a></li>
+<li><a href="#_4">如何使用插件</a></li>
+<li><a href="#jar_1">如何往JAR文件中添加资源文件</a></li>
+<li><a href="#_5">如何替换资源文件中的引用值</a></li>
+<li><a href="#_6">如何使用外部依赖</a></li>
+</ul>
+</div>
+<p>本文的主要是笔者对<code>Maven</code>官方手册的翻译和理解：http://maven.apache.org/guides/getting-started/index.html</p>
+<p>参考了W3Cschool的<code>Maven</code>教程：https://www.w3cschool.cn/maven/u7oe1ht0.html</p>
+<h2 id="maven">如何创建一个Maven项目</h2>
+<p>现在一般都是使用<code>IDE</code>以更人性化的方式创建<code>Maven</code>项目，这里我们使用<code>Maven</code>的<strong>原型（archetype）</strong>插件来创建项目，在命令行以下命令：</p>
+<pre><code class="shell">mvn archetype:generate
+-DgroupId=com.mycompany.app \ 
+-DartifactId=my-app \
+-DarchetypeArtifactId=maven-archetype-quickstart \
+-DinteractiveMode=false
+</code></pre>
+
+<p>执行该命令后，在执行该命令的文件夹下会生成一个名为<code>my-app</code>的项目，并且<code>my-app</code>文件夹下包含了一个<code>pom.xml</code>文件，该文件的内容类似于：</p>
+<pre><code class="xml">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;
+  xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+  xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  &lt;groupId&gt;com.mycompany.app&lt;/groupId&gt;
+  &lt;artifactId&gt;my-app&lt;/artifactId&gt;
+  &lt;packaging&gt;jar&lt;/packaging&gt;
+  &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+  &lt;name&gt;Maven Quick Start Archetype&lt;/name&gt;
+  &lt;url&gt;http://maven.apache.org&lt;/url&gt;
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;junit&lt;/groupId&gt;
+      &lt;artifactId&gt;junit&lt;/artifactId&gt;
+      &lt;version&gt;4.11&lt;/version&gt;
+      &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+&lt;/project&gt;
+</code></pre>
+
+<p><code>pom.xml</code>包含了此项目的项目对象模型（<code>Project Object Model</code>），<code>POM</code>是<code>Maven</code>的基本工作单元，简而言之就是<code>pom.xml</code>中包含了你项目所有重要的信息，能够查找项目的一切相关内容。关于<code>POM</code>的介绍，可以查看<a href="../Maven POM"><code>POM</code>简介</a>。</p>
+<p>下面我们将逐一介绍这个简单的<code>POM</code>几个关键元素：</p>
+<ul>
+<li><strong>project</strong>  这是所有<code>Maven pom.xml</code>文件中的根元素</li>
+<li><strong>modelVersion</strong> 此元素表示<code>POM</code>使用的对象模型版本，对象模型版本很少发生变化。</li>
+<li><strong>groupId</strong> 此元素表示创建项目的组织的唯一标识符，<code>groupId</code>是项目的关键标识符之一，通常基于组织的完全限定域名</li>
+<li><strong>artifactId</strong> 此元素表示该项目生成的工件唯一基本名称，项目生成的工件通常是<code>JAR</code>文件。由<code>Maven</code>生成的典型工件具有<code>&lt;artifactId&gt;-&lt;version&gt;.&lt;extension&gt;</code>形式（例如，<code>myapp-1.0.jar</code>）。</li>
+<li><strong>packaging</strong>  此元素表示工件的打包类型（例如<code>JAR</code>,<code>WAR</code>,<code>EAR</code>等）。这不仅意味着生成的工时<code>JAR</code>,<code>WAR</code>或是<code>EAR</code>，而且还将表明特定的生命周期将会被绑定构建过程中。（详见<a href="../Maven构建生命周期">Maven的构建生命周期</a>）</li>
+<li><strong>version</strong> 此元素表示项目生成的工件的版本。</li>
+<li><strong>name</strong> 此元素表明项目的显示名称，常用于<code>Maven</code>文档的生成。</li>
+<li><strong>url</strong> 此元素表明项目的站点网址，常用于<code>Maven</code>文档的生成。</li>
+<li><strong>description</strong> 此元素提供项目的基本描述，常用于<code>Maven</code>文档的生成。</li>
+</ul>
+<p>有关<code>POM</code>中能够使用的元素更加完整的参考，请参阅官方的 <a href="http://maven.apache.org/ref/current/maven-model/maven.html">POM Reference</a>。</p>
+<p>使用<code>archetype</code>插件生成项目后，你可以看到如下的目录结构被创建：</p>
+<pre><code class="shell">my-app
+|-- pom.xml
+`-- src
+    |-- main
+    |   `-- java
+    |       `-- com
+    |           `-- mycompany
+    |               `-- app
+    |                   `-- App.java
+    `-- test
+        `-- java
+            `-- com
+                `-- mycompany
+                    `-- app
+                        `-- AppTest.java
+</code></pre>
+
+<p>如你所见，除了<code>pom.xml</code>文件外，还生成了应用程序资源和测试资源两颗资源树。这是<code>Maven</code>项目的标准布局，应用程序资源位于<code>${basedir}/src/main/java</code>而测试资源位于<code>${basedir}/src/test/java</code>（<code>${basedir}</code>代表包含<code>pom.xml</code>文件的目录），这也是<code>Maven</code>推荐的布局格式或者说是<code>Maven</code>项目的约定，更多关于<code>Maven</code>的文件布局请参阅 <a href="http://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html">Introduction to the Standard Directory Layout</a>。</p>
+<h2 id="_2">如何编译源码</h2>
+<p>在<code>pom.xml</code>文件所在的路径下执行以下命令（执行<code>Maven</code>命令需要从<code>pom.xml</code>中获取配置信息）：</p>
+<pre><code class="shell">mvn compile
+</code></pre>
+
+<p>通过执行上面的命令，你可以在控制台看到类似的输出：</p>
+<pre><code class="shell">[INFO] -------------------------------------------------------------------
+[INFO] Building Maven Quick Start Archetype
+[INFO]    task-segment: [compile]
+[INFO] -------------------------------------------------------------------
+[INFO] artifact org.apache.maven.plugins:maven-resources-plugin: \
+  checking for updates from central
+...
+[INFO] artifact org.apache.maven.plugins:maven-compiler-plugin: \
+  checking for updates from central
+...
+[INFO] [resources:resources]
+...
+[INFO] [compiler:compile]
+Compiling 1 source file to &lt;dir&gt;/my-app/target/classes
+[INFO] -------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] -------------------------------------------------------------------
+[INFO] Total time: 3 minutes 54 seconds
+[INFO] Finished at: Fri Sep 23 15:48:34 GMT-05:00 2005
+[INFO] Final Memory: 2M/6M
+[INFO] -------------------------------------------------------------------
+</code></pre>
+
+<p>当第一次执行命令时（任何<code>Maven</code>命令），<code>Maven</code>需要从仓库下载完成该命令所需要的插件和依赖。这可能会花费一些时间，但之后如果再执行相同的命令就很快了。</p>
+<p>从输出中可以看到，编译生成的文件被放到了<code>${basedir}/target/classes</code>目录下，这也是<code>Maven</code>的一个标准约定。</p>
+<h2 id="_3">如何编译测试源码并且运行单元测试</h2>
+<p>只要执行以下一条命令即可完成：</p>
+<pre><code class="shell">mvn test
+</code></pre>
+
+<p>通过执行上面的命令，你可以在控制台看到类似的输出：</p>
+<pre><code class="shell">[INFO] -------------------------------------------------------------------
+[INFO] Building Maven Quick Start Archetype
+[INFO]    task-segment: [test]
+[INFO] -------------------------------------------------------------------
+[INFO] artifact org.apache.maven.plugins:maven-surefire-plugin: \
+  checking for updates from central
+...
+[INFO] [resources:resources]
+[INFO] [compiler:compile]
+[INFO] Nothing to compile - all classes are up to date
+[INFO] [resources:testResources]
+[INFO] [compiler:testCompile]
+Compiling 1 source file to C:\Test\Maven2\test\my-app\target\test-classes
+...
+[INFO] [surefire:test]
+[INFO] Setting reports dir: C:\Test\Maven2\test\my-app\target/surefire-reports
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+[surefire] Running com.mycompany.app.AppTest
+[surefire] Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 0 sec
+Results :
+[surefire] Tests run: 1, Failures: 0, Errors: 0
+[INFO] -------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] -------------------------------------------------------------------
+[INFO] Total time: 15 seconds
+[INFO] Finished at: Thu Oct 06 08:12:17 MDT 2005
+[INFO] Final Memory: 2M/8M
+[INFO] -------------------------------------------------------------------
+</code></pre>
+
+<p>需要额外的注意的是<code>surefire</code>插件（它会运行测试用例）会寻找<code>${basedir}/src/test/java</code>下具有特定命名规则的测试文件执行测试，例如：</p>
+<ul>
+<li><code>**/*Test.java</code></li>
+<li><code>**/Test*.java</code></li>
+<li><code>**/*TestCase.java</code></li>
+</ul>
+<p>但会排除具有以下命名规则的文件：</p>
+<ul>
+<li><code>**/Abstract*Test.java</code></li>
+<li><code>**/Abstract*TestCase.java</code></li>
+</ul>
+<p>从上面的输出可以看出，构建过程执行了源码编译、测试源码编译并且运行了单元测试，你可能会觉得奇怪为什么<code>test</code>命令能执行这么多操作，这是因为<code>test</code>会执行<code>test</code>阶段之前所有的阶段，详见<a href="../Maven构建生命周期"><code>Maven</code>的构建生命周期</a>。</p>
+<p>如果你只想编译测试源码但不运行单元测试，你可以执行以下命令：</p>
+<pre><code class="shell">mvn test-compile
+</code></pre>
+
+<h2 id="jar">如何生成一个JAR包并安装到本地仓库</h2>
+<p>要生成<code>JAR</code>文件，首先你需要在<code>POM</code>中指定<code>&lt;packaging&gt;</code>值为<code>jar</code>（或者不进行指定，默认值为<code>jar</code>），这将让<code>Maven</code>知道要生成一个<code>jar</code>文件，然后执行以下命令：</p>
+<pre><code class="shell">mvn package
+</code></pre>
+
+<p>当命令执行完成后，你可以在<code>${basedir}/target</code>目录下看到生成的<code>JAR</code>文件。</p>
+<p>如果你想安装你的生成的工件（这里是<code>JAR</code>文件）到你的本地仓库（<code>${user.home}/.m2/repository</code>是默认的仓库位置）。你可以执行下面的命令：</p>
+<pre><code class="shell">mvn install
+</code></pre>
+
+<p>通过执行上面的命令，你可以在控制台看到类似的输出：</p>
+<pre><code class="shell">[INFO] -------------------------------------------------------------------
+[INFO] Building Maven Quick Start Archetype
+[INFO]    task-segment: [install]
+[INFO] -------------------------------------------------------------------
+[INFO] [resources:resources]
+[INFO] [compiler:compile]
+Compiling 1 source file to &lt;dir&gt;/my-app/target/classes
+[INFO] [resources:testResources]
+[INFO] [compiler:testCompile]
+Compiling 1 source file to &lt;dir&gt;/my-app/target/test-classes
+[INFO] [surefire:test]
+[INFO] Setting reports dir: &lt;dir&gt;/my-app/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+[surefire] Running com.mycompany.app.AppTest
+[surefire] Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 0.001 sec
+Results :
+[surefire] Tests run: 1, Failures: 0, Errors: 0
+[INFO] [jar:jar]
+[INFO] Building jar: &lt;dir&gt;/my-app/target/my-app-1.0-SNAPSHOT.jar
+[INFO] [install:install]
+[INFO] Installing &lt;dir&gt;/my-app/target/my-app-1.0-SNAPSHOT.jar to \
+   &lt;local-repository&gt;/com/mycompany/app/my-app/1.0-SNAPSHOT/my-app-1.0-SNAPSHOT.jar
+[INFO] -------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] -------------------------------------------------------------------
+[INFO] Total time: 5 seconds
+[INFO] Finished at: Tue Oct 04 13:20:32 GMT-05:00 2005
+[INFO] Final Memory: 3M/8M
+[INFO] -------------------------------------------------------------------
+</code></pre>
+
+<h2 id="_4">如何使用插件</h2>
+<p>当你想要自定义<code>Maven</code>项目的构建时，你可以通过添加或重新配置插件来实现。下面的例子我们通过配置使<code>Java</code>编译器允许<code>JDK 5.0</code>的源，你可以简单地添加以下内容：</p>
+<pre><code class="xml">...
+&lt;build&gt;
+  &lt;plugins&gt;
+    &lt;plugin&gt;
+      &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+      &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+      &lt;version&gt;3.3&lt;/version&gt;
+      &lt;configuration&gt;
+        &lt;source&gt;1.5&lt;/source&gt;
+        &lt;target&gt;1.5&lt;/target&gt;
+      &lt;/configuration&gt;
+    &lt;/plugin&gt;
+  &lt;/plugins&gt;
+&lt;/build&gt;
+...
+</code></pre>
+
+<p><code>Maven</code>会自动下载和使用你指定版本的插件（如果你没有指定插件版本，则默认使用最新版本）。</p>
+<p>在上面的例子中，<code>configuration</code>元素会被应用到<code>compiler</code>插件的所有目标（goal）上（注：你也可以在<code>&lt;plugin&gt;</code>的子元素<code>&lt;execution&gt;</code>中将<code>configuration</code>应用的某一个目标上），实际上<code>compiler</code>插件已经在构建过程中使用了，上面的例子只是修改了部分配置信息。你也可以为构建过程添加新的插件目标，更多信息可以查看<a href="../Maven构建生命周期"><code>Maven</code>的构建生命周期</a>。</p>
+<p>你可以在<code>Maven</code>官方文档中查看更多可用的插件，详见<a href="http://maven.apache.org/plugins/">Plugins List</a> 。官方文档同时也对<code>Maven</code>插件的配置和进行了比较详细的介绍，详见 <a href="http://maven.apache.org/guides/mini/guide-configuring-plugins.html">Guide to Configuring Plugins</a>。</p>
+<h2 id="jar_1">如何往JAR文件中添加资源文件</h2>
+<p>在<code>JAR</code>包中添加资源文件是一个常见的需求，对于这个需求<code>Maven</code>仍然依赖于的他的标准文件布局（<a href="http://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html">Standard Directory Layout</a>），这意味着只要遵守<code>Maven</code>的标准约定，你就可以通过简单地将这些资源文件放在标准的目录结构下实现在<code>JAR</code>包中封装资源。</p>
+<p>在下面的例子中，我们添加了<code>${basedir}/src/main/resources</code>目录并把想要被打包进<code>JAR</code>包的资源都放在该目录下。<code>Maven</code>采用的规则是：放在<code>${basedir}/src/main/resources</code>目录下的任何文件或者文件夹都会被打包进行<code>JAR</code>包中，并且这些资源的文件结构将在<code>JAR</code>包内与原来一致。</p>
+<pre><code class="shell">my-app
+|-- pom.xml
+`-- src
+    |-- main
+    |   |-- java
+    |   |   `-- com
+    |   |       `-- mycompany
+    |   |           `-- app
+    |   |               `-- App.java
+    |   `-- resources
+    |       `-- META-INF
+    |           `-- application.properties
+    `-- test
+        `-- java
+            `-- com
+                `-- mycompany
+                    `-- app
+                        `-- AppTest.java
+</code></pre>
+
+<p>如你所见，我们在<code>resource</code>文件下创建了一个<code>META-INF</code>文件夹并新建了一个<code>application.properties</code>文件。如果你解压了由上面的项目生成的<code>JAR</code>包，你可以看到如下结构：</p>
+<pre><code class="shell">|-- META-INF
+|   |-- MANIFEST.MF
+|   |-- application.properties
+|   `-- maven
+|       `-- com.mycompany.app
+|           `-- my-app
+|               |-- pom.properties
+|               `-- pom.xml
+`-- com
+    `-- mycompany
+        `-- app
+            `-- App.class
+</code></pre>
+
+<p>可以看到在<code>resources</code>文件中添加的内容都以相同的结构出现在<code>JAR</code>包中了，但你可能注意到了几个额外的文件（<code>MANIFEST.MF, pom.xml, pom.properties</code>）和目录，其实这些都是<code>Maven</code>生成<code>JAR</code>包的标准产出物（注：其实<code>META-INF</code>就是标准产出的一部分，只是由于在<code>resources</code>中取了相同的名字所以<code>application.properties</code>会出现在这个位置），这些文件存在目的是让<code>Maven</code>生成的工件能够实现自述（<code>self-describing</code>）。</p>
+<h2 id="_5">如何替换资源文件中的引用值</h2>
+<p>有时资源文件需要包含一些只能在构建阶段才提供的值，要在<code>Maven</code>中完成此操作，可以使用语法<code>$ {&lt;property name&gt;}</code>将包含值的属性引用到资源文件中。该属性可以是<code>pom.xml</code>文件中定义的一个值，在某用户的<code>setting.xml</code>文件中定义的值，一个外部的properties 文件中的属性或者是系统属性。</p>
+<p>为了在资源准备阶段（<code>process-resources phase</code>）将语法<code>$ {&lt;property name&gt;}</code>替换（<code>filter</code>）为特定的值，只要简单地将<code>pom.xml</code>文件中的<code>&lt;filtering&gt;</code>设置为<code>true</code>即可：</p>
+<pre><code class="xml">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;
+  xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+  xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+
+  &lt;groupId&gt;com.mycompany.app&lt;/groupId&gt;
+  &lt;artifactId&gt;my-app&lt;/artifactId&gt;
+  &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+  &lt;packaging&gt;jar&lt;/packaging&gt;
+
+  &lt;name&gt;Maven Quick Start Archetype&lt;/name&gt;
+  &lt;url&gt;http://maven.apache.org&lt;/url&gt;
+
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;junit&lt;/groupId&gt;
+      &lt;artifactId&gt;junit&lt;/artifactId&gt;
+      &lt;version&gt;4.11&lt;/version&gt;
+      &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+
+  &lt;build&gt;
+    &lt;resources&gt;
+      &lt;resource&gt;
+        &lt;directory&gt;src/main/resources&lt;/directory&gt;
+        &lt;filtering&gt;true&lt;/filtering&gt;
+      &lt;/resource&gt;
+    &lt;/resources&gt;
+  &lt;/build&gt;
+&lt;/project&gt;
+</code></pre>
+
+<p>如上所示，我们添加了<code>&lt;build&gt;、&lt;resources&gt;</code>以及<code>&lt;resource&gt;</code>元素，而且还明确声明了<code>src/main/resources</code>为资源文件所在的位置。这些信息在未声明前都是以默认值的形式提供，但由于<code>&lt;filtering&gt;</code>的默认值为<code>false</code>，所以我们必须显示地声明它并且设置为<code>true</code>。</p>
+<p>下面让我们在<code>application.properties</code>文件中添加两个属性，它们会在构建阶段被替换为特定的值：</p>
+<pre><code class="properties"># application.properties
+application.name=${project.name}
+application.version=${project.version}
+</code></pre>
+
+<p>其中<code>${project.name}</code>和<code>${project.version}</code>为<code>Maven</code>的项目变量，分别代表当前项目的名字和版本，详见<a href="../Maven POM#_4">项目变量以及插值</a>部分。之后，你可执行下面的命令（<code>process-resources</code>是构建生命周期的一个阶段，执行资源文件的复制和替换）：</p>
+<pre><code class="shell">mvn process-resources
+</code></pre>
+
+<p>然后，你会在<code>target/classes</code>目录下看到替换之后的<code>application.properties</code>如下：</p>
+<pre><code class="properties"># application.properties
+application.name=Maven Quick Start Archetype
+application.version=1.0-SNAPSHOT
+</code></pre>
+
+<p>如果你要引用外部<code>properties</code>文件（指的应该是非系统属性和<code>pom.xml</code>中定义的属性，即使<code>properties</code>文件在<code>resources</code>目录下）的某一个属性，你需要在<code>pom.xml</code>中添加对这个外部文件的引用。例如，我们创建了一个外部<code>properties</code>文件，它的完整路径为<code>src/main/filters/filter.properties</code>，内容如下：</p>
+<pre><code class="properties"># filter.properties
+my.filter.value=hello!
+</code></pre>
+
+<p>现在，我们需要在<code>pom.xml</code>中添加新的引用：</p>
+<pre><code class="xml">...
+  &lt;build&gt;
+    &lt;filters&gt;
+      &lt;filter&gt;src/main/filters/filter.properties&lt;/filter&gt;
+    &lt;/filters&gt;
+    &lt;resources&gt;
+      &lt;resource&gt;
+        &lt;directory&gt;src/main/resources&lt;/directory&gt;
+        &lt;filtering&gt;true&lt;/filtering&gt;
+      &lt;/resource&gt;
+    &lt;/resources&gt;
+  &lt;/build&gt;
+...
+</code></pre>
+
+<p>接着，就可以在<code>application.properties</code>文件中引用这个属性了：</p>
+<pre><code class="properties"># application.properties
+application.name=${project.name}
+application.version=${project.version}
+message=${my.filter.value}
+</code></pre>
+
+<p>在外部文件中定义my.filter.value属性的替代方案是在<code>pom.xml</code>的<code>&lt;properties&gt;</code>元素中定义它并获得相同的效果（注意，这里没有添加<code>filters</code>元素）：</p>
+<pre><code class="xml">...
+  &lt;build&gt;
+    &lt;resources&gt;
+      &lt;resource&gt;
+        &lt;directory&gt;src/main/resources&lt;/directory&gt;
+        &lt;filtering&gt;true&lt;/filtering&gt;
+      &lt;/resource&gt;
+    &lt;/resources&gt;
+  &lt;/build&gt;
+
+  &lt;properties&gt;
+    &lt;my.filter.value&gt;hello&lt;/my.filter.value&gt;
+  &lt;/properties&gt;
+...
+</code></pre>
+
+<p>替换值也可以从系统属性中获取，包括<code>Java</code>内置的系统属性（如<code>java.version, user.home</code>）或者使用<code>Java -D</code>参数在命令行上定义的属性。</p>
+<p>例如，<code>application.properties</code>的内容如下：</p>
+<pre><code class="properties"># application.properties
+java.version=${java.version}
+command.line.prop=${command.line.prop}
+</code></pre>
+
+<p>我们将在命令行上定义<code>command.line.prop</code>属性的值，如下：</p>
+<pre><code class="shell">mvn process-resources &quot;-Dcommand.line.prop=hello again&quot;
+</code></pre>
+
+<h2 id="_6">如何使用外部依赖</h2>
+<p>外部依赖即<code>POM</code>中的<code>&lt;dependencies&gt;</code>部分定义的内容（例如之前例子中的<code>junit jar</code>包），接下来我们将了解它是如何工作的。更加全面的介绍，请参考官方文档对依赖机制的介绍（ <a href="http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html">Introduction to Dependency Mechanism</a>）。</p>
+<p>让我们以之前的项目为例子：</p>
+<pre><code class="xml">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;
+  xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+  xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+
+  &lt;groupId&gt;com.mycompany.app&lt;/groupId&gt;
+  &lt;artifactId&gt;my-app&lt;/artifactId&gt;
+  &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+  &lt;packaging&gt;jar&lt;/packaging&gt;
+
+  &lt;name&gt;Maven Quick Start Archetype&lt;/name&gt;
+  &lt;url&gt;http://maven.apache.org&lt;/url&gt;
+
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;junit&lt;/groupId&gt;
+      &lt;artifactId&gt;junit&lt;/artifactId&gt;
+      &lt;version&gt;4.11&lt;/version&gt;
+      &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+&lt;/project&gt;
+</code></pre>
+
+<p>对于外部依赖，你需要至少定义4个属性：<code>groupId, artifactId, version</code>和<code>scope</code>。其中<code>groupId, artifactId, version</code>就是你需要引用的项目的<code>pom.xml</code>文件中定义的，而<code>scope</code>表示你要在哪个范围内使用这个依赖，下表为<code>scope</code>可用的值：</p>
+<table>
+<thead>
+<tr>
+<th align="center">Scope</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><code>compile</code></td>
+<td align="center"><code>compile</code>为<code>scope</code>的默认值，如果未指定<code>scope</code>则<code>scope</code>的值为<code>compile</code>。此范围的依赖项（<code>dependencie</code>）在项目的所有类路径（<code>classpath</code>）下都可以使用，并且如果其他项目依赖该项目，依赖了该项目的项目也可以使用这个依赖项。</td>
+</tr>
+<tr>
+<td align="center"><code>provided</code></td>
+<td align="center">类似于<code>compile</code>，但<code>provided</code>表示依赖项在运行时由<code>JDK</code>或容器提供。例如，在构建<code>JaveEE WEB</code>项目时，你应该把<code>Servlet API</code>和<code>Java EE APIs</code>依赖项的范围设置为<code>provided,</code>因为<code>WEB</code>容器的<code>classpaths</code>会提供这些类。此范围的依赖项只能在编译和测试类路径中使用，且不具有传递性。</td>
+</tr>
+<tr>
+<td align="center"><code>runtime</code></td>
+<td align="center">此范围表明，在运行时需要该依赖项但编译时不需要。它位于运行时和测试类路径下。</td>
+</tr>
+<tr>
+<td align="center"><code>test</code></td>
+<td align="center">此范围表明，该依赖项只在测试部分的编译和运行阶段使用，并且不具有传递性。</td>
+</tr>
+<tr>
+<td align="center"><code>system</code></td>
+<td align="center">类似于<code>provided</code>，但必须提供明确包含了依赖项的<code>jar</code>包。</td>
+</tr>
+</tbody>
+</table>
+<p>通过这些依赖信息，<code>Maven</code>能够在构建项目时通过这些信息找到这些依赖项。<code>Maven</code>会在本地仓库（默认位置为<code>${user.home}/.m2/repository</code>）查找依赖，在<a href="#jar">如何生成一个JAR包并安装到本地仓库</a>中我将<code>my-app-1.0-SNAPSHOT.jar</code>安装到了本地仓库中，所以我们可以在其他项目的<code>pom.xml</code>文件中添加依赖信息来引用这个<code>jar</code>包：</p>
+<pre><code class="xml">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;
+  xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+  xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
+  &lt;groupId&gt;com.mycompany.app&lt;/groupId&gt;
+  &lt;artifactId&gt;my-other-app&lt;/artifactId&gt;
+  ...
+  &lt;dependencies&gt;
+    ...
+    &lt;dependency&gt;
+      &lt;groupId&gt;com.mycompany.app&lt;/groupId&gt;
+      &lt;artifactId&gt;my-app&lt;/artifactId&gt;
+      &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+      &lt;scope&gt;compile&lt;/scope&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+&lt;/project&gt;
+</code></pre>
+
+<p>如果项目引用了本地仓库中不存在的依赖项，<code>Maven</code>会将该依赖从远程仓库下载到本地仓库中。<code>Maven</code>默认使用的远程仓库为<code>http://repo.maven.apache.org/maven2/</code>，你也可以配置自己的远程仓库（国内可以使用阿里的远程仓库<code>http://maven.aliyun.com/nexus/content/groups/public</code>）来替代或做为默认仓库的补充。更多关于仓库的的资料可以参考官方文档<a href="http://maven.apache.org/guides/introduction/introduction-to-repositories.html">Introduction to Repositories</a>。</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../Maven构建生命周期/" class="btn btn-neutral float-right" title="Maven构建生命周期">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../Maven Profile/" class="btn btn-neutral" title="Profile简介"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../Maven Profile/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../Maven构建生命周期/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+
+</body>
+</html>

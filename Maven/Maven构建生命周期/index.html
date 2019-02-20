@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>Maven构建生命周期 - Notes</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Maven\u6784\u5efa\u751f\u547d\u5468\u671f";
+    var mkdocs_page_input_path = "Maven\\Maven\u6784\u5efa\u751f\u547d\u5468\u671f.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Notes</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Maven</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../Maven POM/">POM简介</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Maven Profile/">Profile简介</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../Maven概述/">Maven概述</a>
+                </li>
+                <li class=" current">
+                    
+    <a class="current" href="./">Maven构建生命周期</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#_1">概述</a></li>
+    
+
+    <li class="toctree-l3"><a href="#maven">Maven的构建生命周期</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#maven_1">Maven构建生命周期是由多个构建阶段组成的</a></li>
+        
+            <li><a class="toctree-l4" href="#_2">构建阶段由多个插件目标组成</a></li>
+        
+            <li><a class="toctree-l4" href="#_3">生命周期参考</a></li>
+        
+            <li><a class="toctree-l4" href="#_4">通过配置项目来使用构建生命周期</a></li>
+        
+        </ul>
+    
+
+    </ul>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Notes</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Maven &raquo;</li>
+        
+      
+    
+    <li>Maven构建生命周期</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h2 id="_1">概述</h2>
+<p>本文主要是对<code>Maven</code>的构建生命周期进行简单的介绍。</p>
+<p><strong>索引</strong></p>
+<div class="toc">
+<ul>
+<li><a href="#_1">概述</a></li>
+<li><a href="#maven">Maven的构建生命周期</a><ul>
+<li><a href="#maven_1">Maven构建生命周期是由多个构建阶段组成的</a></li>
+<li><a href="#_2">构建阶段由多个插件目标组成</a></li>
+<li><a href="#_3">生命周期参考</a><ul>
+<li><a href="#clean">Clean生命周期</a></li>
+<li><a href="#default">Default生命周期</a></li>
+<li><a href="#site">Site生命周期</a></li>
+</ul>
+</li>
+<li><a href="#_4">通过配置项目来使用构建生命周期</a><ul>
+<li><a href="#1packaging">1.Packaging</a></li>
+<li><a href="#2plugins">2.Plugins</a><ul>
+<li><a href="#_5">例子</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p>本文的主要是笔者对<code>Maven</code>官方手册的翻译和理解：http://maven.apache.org/guides/introduction/introduction-to-the-pom.html</p>
+<p>参考了W3Cschool的<code>Maven</code>教程：https://www.w3cschool.cn/maven/tkhr1ht6.html</p>
+<h2 id="maven">Maven的构建生命周期</h2>
+<p>Maven的构建生命周期一共有三个：分别是<code>default(build)</code>、<code>site</code>和<code>clean</code>。</p>
+<table>
+<thead>
+<tr>
+<th align="center">生命周期</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">default(build)</td>
+<td align="center">用于处理项目部署</td>
+</tr>
+<tr>
+<td align="center">site</td>
+<td align="center">用于创建项目站点文档</td>
+</tr>
+<tr>
+<td align="center">clean</td>
+<td align="center">用于清理其他生命周期生成的文件</td>
+</tr>
+</tbody>
+</table>
+<h3 id="maven_1">Maven构建生命周期是由多个构建阶段组成的</h3>
+<p>以default构建生命周期为例，它由以下几个构建阶段组成</p>
+<ul>
+<li><code>validate</code> - 检查工程配置是否正确，完成构建过程的所有必要信息是否能够获取到</li>
+<li><code>compile</code> - 编译工程源码</li>
+<li><code>test</code> - 使用适当的单元测试框架（例如JUnit）运行测试</li>
+<li><code>package</code> - 获取编译后的代码，并按照可发布的格式进行打包，例如 <code>JAR</code>、<code>WAR</code> 或者 <code>EAR</code> 文件</li>
+<li><code>verify</code> - 运行检查操作来验证工程包是有效的，并满足质量要求</li>
+<li><code>install</code> - 安装工程包到本地仓库中，该仓库可以作为本地其他工程的依赖</li>
+<li><code>deploy</code> - 拷贝最终的工程包到远程仓库中，以共享给其他开发人员和工程</li>
+</ul>
+<p>这些生命周期阶段（以及此处未显示的其他生命周期阶段）将按顺序执行，以完成默认生命周期。 鉴于上面的生命周期阶段，这意味着当使用默认生命周期时，<code>Maven</code>将首先验证项目，然后将尝试编译源代码，针对测试运行，打包二进制文件（例如<code>jar</code>），对其运行集成测试包，验证集成测试，将经过验证的软件包安装到本地存储库，然后将已安装的软件包部署到远程存储库。</p>
+<h3 id="_2">构建阶段由多个插件目标组成</h3>
+<p>插件目标（goal）表示特定任务（比构建阶段更精细），这有助于构建和管理项目。 它可能绑定到零个或多个构建阶段。没有绑定任何构建阶段的目标可以在构建生命周期之外被直接调用执行。执行顺序取决于调用目标和构建阶段的顺序。例如，下面的命令中<code>clean</code>和<code>package</code>参数是构建阶段，而<code>dependency:copy-dependencies</code>是（插件的）目标。</p>
+<pre><code class="shell">mvn clean dependency:copy-dependencies package
+</code></pre>
+
+<p>这里的 <code>clean</code> 阶段将会被首先执行，然后 <code>dependency:copy-dependencies</code>目标会被执行，最终<code>package</code>阶段被执行。</p>
+<h3 id="_3">生命周期参考</h3>
+<p>有一些与 Maven 生命周期相关的重要概念需要说明：当一个阶段通过 <code>Maven</code> 命令调用时，例如 <em>mvn package</em>，<em>该阶段之前以及包括该阶段在内的所有阶段会被执行</em>。不同的 maven 目标将根据<code>package</code>的类型（<code>JAR / WAR / EAR/ POM</code>），被绑定到不同的 Maven 生命周期阶段。</p>
+<h4 id="clean">Clean生命周期</h4>
+<table>
+<thead>
+<tr>
+<th align="center">生命周期阶段</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">pre-clean</td>
+<td align="center">在实际项目清理之前执行所需的过程</td>
+</tr>
+<tr>
+<td align="center">clean</td>
+<td align="center">删除之前构建过程中生成的所有文件</td>
+</tr>
+<tr>
+<td align="center">post-clean</td>
+<td align="center">执行完成项目清理所需的过程</td>
+</tr>
+</tbody>
+</table>
+<h4 id="default">Default生命周期</h4>
+<table>
+<thead>
+<tr>
+<th align="center">生命周期阶段</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">validate</td>
+<td align="center">检查工程配置是否正确，完成构建过程的所有必要信息是否能够获取到。</td>
+</tr>
+<tr>
+<td align="center">initialize</td>
+<td align="center">初始化构建状态，例如设置属性。</td>
+</tr>
+<tr>
+<td align="center">generate-sources</td>
+<td align="center">生成编译阶段需要包含的任何源码文件。</td>
+</tr>
+<tr>
+<td align="center">process-sources</td>
+<td align="center">处理源代码，例如，过滤任何值（filter any value）。</td>
+</tr>
+<tr>
+<td align="center">generate-resources</td>
+<td align="center">生成工程包中需要包含的资源文件。</td>
+</tr>
+<tr>
+<td align="center">process-resources</td>
+<td align="center">拷贝和处理资源文件到目的目录中，为打包阶段做准备。</td>
+</tr>
+<tr>
+<td align="center">compile</td>
+<td align="center">编译工程源码。</td>
+</tr>
+<tr>
+<td align="center">process-classes</td>
+<td align="center">处理编译生成的文件，例如 Java Class 字节码的加强和优化。</td>
+</tr>
+<tr>
+<td align="center">generate-test-sources</td>
+<td align="center">生成编译阶段需要包含的任何测试源代码。</td>
+</tr>
+<tr>
+<td align="center">process-test-sources</td>
+<td align="center">处理测试源代码，例如，过滤任何值（filter any values)。</td>
+</tr>
+<tr>
+<td align="center">test-compile</td>
+<td align="center">编译测试源代码到测试目的目录。</td>
+</tr>
+<tr>
+<td align="center">process-test-classes</td>
+<td align="center">处理测试代码文件编译后生成的文件。</td>
+</tr>
+<tr>
+<td align="center">test</td>
+<td align="center">使用适当的单元测试框架（例如JUnit）运行测试。</td>
+</tr>
+<tr>
+<td align="center">prepare-package</td>
+<td align="center">在真正打包之前，为准备打包执行任何必要的操作。</td>
+</tr>
+<tr>
+<td align="center">package</td>
+<td align="center">获取编译后的代码，并按照可发布的格式进行打包，例如 JAR、WAR 或者 EAR 文件。</td>
+</tr>
+<tr>
+<td align="center">pre-integration-test</td>
+<td align="center">在集成测试执行之前，执行所需的操作。例如，设置所需的环境变量。</td>
+</tr>
+<tr>
+<td align="center">integration-test</td>
+<td align="center">处理和部署必须的工程包到集成测试能够运行的环境中。</td>
+</tr>
+<tr>
+<td align="center">post-integration-test</td>
+<td align="center">在集成测试被执行后执行必要的操作。例如，清理环境。</td>
+</tr>
+<tr>
+<td align="center">verify</td>
+<td align="center">运行检查操作来验证工程包是有效的，并满足质量要求。</td>
+</tr>
+<tr>
+<td align="center">install</td>
+<td align="center">安装工程包到本地仓库中，该仓库可以作为本地其他工程的依赖。</td>
+</tr>
+<tr>
+<td align="center">deploy</td>
+<td align="center">拷贝最终的工程包到远程仓库中，以共享给其他开发人员和工程。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="site">Site生命周期</h4>
+<table>
+<thead>
+<tr>
+<th align="center">生命周期阶段</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">pre-site</td>
+<td align="center">在实际项目站点生成之前执行所需的过程</td>
+</tr>
+<tr>
+<td align="center">site</td>
+<td align="center">生成项目的站点文档</td>
+</tr>
+<tr>
+<td align="center">post-site</td>
+<td align="center">执行完成站点生成所需的流程，并准备站点部署</td>
+</tr>
+<tr>
+<td align="center">site-deploy</td>
+<td align="center">将生成的站点文档部署到指定的Web服务器</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_4">通过配置项目来使用构建生命周期</h3>
+<h4 id="1packaging">1.Packaging</h4>
+<p>最常见的方法是通过指定<code>pom</code>元素<code>&lt;packaging&gt;</code>的类型来绑定各构建阶段及其对应的插件目标。可用的打包类型主要有<code>jar</code>, <code>war</code>, <code>ear</code> 和<code>pom</code>，如果未在<code>pom.xml</code>文件中指定打包类型，则会被设置为默认值<code>jar</code>。</p>
+<p>每种打包类型包含一系列被绑定到特定构建阶段的插件目标。例如，<code>jar</code>类型将绑定如下目标以构建默认生命周期的阶段。</p>
+<table>
+<thead>
+<tr>
+<th align="center">Phase</th>
+<th align="center">plugin:goal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><code>process-resources</code></td>
+<td align="center"><code>resources:resources</code></td>
+</tr>
+<tr>
+<td align="center"><code>compile</code></td>
+<td align="center"><code>compiler:compile</code></td>
+</tr>
+<tr>
+<td align="center"><code>process-test-resources</code></td>
+<td align="center"><code>resources:testResources</code></td>
+</tr>
+<tr>
+<td align="center"><code>test-compile</code></td>
+<td align="center"><code>compiler:testCompile</code></td>
+</tr>
+<tr>
+<td align="center"><code>test</code></td>
+<td align="center"><code>surefire:test</code></td>
+</tr>
+<tr>
+<td align="center"><code>package</code></td>
+<td align="center"><code>jar:jar</code></td>
+</tr>
+<tr>
+<td align="center"><code>install</code></td>
+<td align="center"><code>install:install</code></td>
+</tr>
+<tr>
+<td align="center"><code>deploy</code></td>
+<td align="center"><code>deploy:deploy</code></td>
+</tr>
+</tbody>
+</table>
+<p>大部分打包类型的绑定集相差不大，但是有一些打包类型却比较特殊。例如，当打包类型为<code>pom</code>的项目仅将目标绑定到install和deploy阶段（有关某些打包类型的目标到构建阶段绑定的完整列表，请参阅<a href="http://maven.apache.org/ref/current/maven-core/default-bindings.html">standard set of bindings</a>）。</p>
+<h4 id="2plugins">2.Plugins</h4>
+<p>另一种添加目标到指定阶段的方式是在项目中配置插件。插件具有一个或多个目标，其中每个目标表示该插件的能力。 例如，<code>Compiler</code>插件有两个目标：<code>compile</code>和<code>testCompile</code>。前者编译主代码的源代码，后者编译测试代码的源代码。</p>
+<p>插件可以包含将目标绑定到哪个生命周期阶段的信息，需要注意的是仅仅指定插件本身是不够的，必须还要指明在构建过程中要运行的插件目标。</p>
+<p>目标的配置会应用到已经被绑定到指定打包类型的目标上。如果有多个目标绑定一个特定构建阶段，则目标的运行顺序是先执行绑定到打包类型上的目标，然后再执行<code>pom</code>文件中配置的目标。这些配置可以使用<code>&lt;executions&gt;</code>元素来进行详细的控制。</p>
+<h5 id="_5">例子</h5>
+<p>例如，<code>Modello</code>插件的目标<code>modello:java</code>被默认绑定到了<code>generate-sources</code>阶段（注：<code>maven</code>中的插件目标一般会有默认绑定的阶段，所以如果没有指定绑定阶段则目标会在默认阶段执行，<a href="http://maven.apache.org/developers/mojo-api-specification.html">详细内容可见maven手册</a>。因此，要使用<code>Modello</code>插件并在构建过程中执行<code>java</code>目标，可以通过在<code>pom</code>文件中的<code>&lt;build&gt;</code>的元素的子元素<code>&lt;plugins&gt;</code>中添加以下内容：</p>
+<pre><code class="xml"> &lt;plugin&gt;
+   &lt;groupId&gt;org.codehaus.modello&lt;/groupId&gt;
+   &lt;artifactId&gt;modello-maven-plugin&lt;/artifactId&gt;
+   &lt;version&gt;1.8.1&lt;/version&gt;
+   &lt;executions&gt;
+     &lt;execution&gt;
+       &lt;configuration&gt;
+         &lt;models&gt;
+           &lt;model&gt;src/main/mdo/maven.mdo&lt;/model&gt;
+         &lt;/models&gt;
+         &lt;version&gt;4.0.0&lt;/version&gt;
+       &lt;/configuration&gt;
+       &lt;goals&gt;
+         &lt;goal&gt;java&lt;/goal&gt;
+       &lt;/goals&gt;
+     &lt;/execution&gt;
+   &lt;/executions&gt;
+ &lt;/plugin&gt;
+</code></pre>
+
+<p>请注意，在<code>&lt;executions&gt;</code>元素中<code>&lt;goal&gt;</code>元素是一定要指定的。当有多个<code>&lt;execution&gt;</code>指定到特定的阶段时，它们将按照<code>pom</code>文件中指定的顺序执行，并且先执行子类的<code>&lt;execution&gt;</code>。</p>
+<p>对于上面的例子，<code>modello:java</code>只会在它的默认阶段<code>generate-sources</code>执行，但你可能会有自己指定阶段的需求。例如，假设目标<code>display:time</code>可以输出当前时间到命令行，并且你希望它在<code>process-test-resources</code>阶段运行以显示测试开始的时间。你可以进行如下配置：</p>
+<pre><code class="xml"> &lt;plugin&gt;
+   &lt;groupId&gt;com.mycompany.example&lt;/groupId&gt;
+   &lt;artifactId&gt;display-maven-plugin&lt;/artifactId&gt;
+   &lt;version&gt;1.0&lt;/version&gt;
+   &lt;executions&gt;
+     &lt;execution&gt;
+       &lt;phase&gt;process-test-resources&lt;/phase&gt;
+       &lt;goals&gt;
+         &lt;goal&gt;time&lt;/goal&gt;
+       &lt;/goals&gt;
+     &lt;/execution&gt;
+   &lt;/executions&gt;
+ &lt;/plugin&gt;
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../Maven概述/" class="btn btn-neutral" title="Maven概述"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../Maven概述/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+
+</body>
+</html>
