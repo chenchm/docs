@@ -50,6 +50,11 @@
           
             <li class="toctree-l1">
 		
+    <a class="" href="../..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
     <span class="caption-text">Maven</span>
     <ul class="subnav">
                 <li class="">
@@ -146,8 +151,8 @@
 </li>
 </ul>
 </div>
-<p>本文的主要是笔者对<code>Maven</code>官方手册的翻译和理解：http://maven.apache.org/guides/introduction/introduction-to-profiles.html</p>
-<p>参考了W3Cschool的<code>Maven</code>教程：https://www.w3cschool.cn/maven/tchv1ht8.html</p>
+<p>本文的主要是笔者对<code>Maven</code>官方手册的翻译和理解：<a href="http://maven.apache.org/guides/introduction/introduction-to-profiles.html">http://maven.apache.org/guides/introduction/introduction-to-profiles.html</a></p>
+<p>参考了W3Cschool的<code>Maven</code>教程：<a href="https://www.w3cschool.cn/maven/tchv1ht8.html">https://www.w3cschool.cn/maven/tchv1ht8.html</a></p>
 <h2 id="profiles">构建配置文件（Profiles）简介</h2>
 <h3 id="_2">为什么要有构建配置文件</h3>
 <p><code>Maven</code>的宗旨是尽可能确保构建的可移植性，但在某些情况下可移植并不是完全可能的。例如，可能需要使用本地文件系统环境变量来配置插件，或者根据构建环境的不同来选择使用不同的插件等。为了解决这些问题，<code>Maven</code>引入了构建配置文件的概念，通过在<code>&lt;profiles&gt;</code>元素中额外或者再次配置<code>POM</code>中某些元素，并通过各种条件来触发<code>&lt;profile&gt;</code>的配置。<em><code>&lt;profile&gt;</code>会根据触发条件在构建时修改<code>POM</code>，这意味着<code>&lt;profiles&gt;</code>作为补充集合在构建时会根据不同的目标环境提供等价但不同的参数</em>。这样，项目仍然能够保持可移植性，根据不同的构建需求生成不同的构建结果。</p>
