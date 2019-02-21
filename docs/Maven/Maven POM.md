@@ -6,9 +6,9 @@
 
 [TOC]
 
-本文的主要是笔者对`Maven`官方手册的翻译和理解：http://maven.apache.org/guides/introduction/introduction-to-the-pom.html
+本文的主要是笔者对`Maven`官方手册的翻译和理解：[http://maven.apache.org/guides/introduction/introduction-to-the-pom.html](http://maven.apache.org/guides/introduction/introduction-to-the-pom.html)
 
-参考了W3Cschool的`Maven`教程：https://www.w3cschool.cn/maven/varq1ht4.html
+参考了W3Cschool的`Maven`教程：[https://www.w3cschool.cn/maven/varq1ht4.html](https://www.w3cschool.cn/maven/varq1ht4.html)
 
 ## POM简介
 

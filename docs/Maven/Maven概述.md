@@ -6,9 +6,9 @@
 
 [TOC]
 
-本文的主要是笔者对`Maven`官方手册的翻译和理解：http://maven.apache.org/guides/getting-started/index.html
+本文的主要是笔者对`Maven`官方手册的翻译和理解：[http://maven.apache.org/guides/getting-started/index.html](http://maven.apache.org/guides/getting-started/index.html)
 
-参考了W3Cschool的`Maven`教程：https://www.w3cschool.cn/maven/u7oe1ht0.html
+参考了W3Cschool的`Maven`教程：[https://www.w3cschool.cn/maven/u7oe1ht0.html](https://www.w3cschool.cn/maven/u7oe1ht0.html)
 
 ## 如何创建一个Maven项目
 

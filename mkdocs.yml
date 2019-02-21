@@ -1,5 +1,6 @@
 site_name: Notes
 nav:
+    - Home: index.md
     - 'Maven':
         - POM简介: Maven/Maven POM.md
         - Profile简介: Maven/Maven Profile.md
