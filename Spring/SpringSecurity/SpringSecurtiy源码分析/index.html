@@ -1,0 +1,1837 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.0">
+    
+    
+      
+        <title>SpringSecurity笔记 - Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/application.1b62728e.css">
+      
+      
+    
+    
+      <script src="../../../assets/javascripts/modernizr.268332fc.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+    
+    
+  </head>
+  
+    <body dir="ltr">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#springsecurity" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../../.." title="Notes" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              Notes
+            </span>
+            <span class="md-header-nav__topic">
+              
+                SpringSecurity笔记
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/ginkoc/docs/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../../.." title="Notes" class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </a>
+    Notes
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/ginkoc/docs/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      AOP
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        AOP
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../AOP/Aspectj切面织入/" title="Aspectj切面织入" class="md-nav__link">
+      Aspectj切面织入
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Docker
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Docker
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Docker/Docker镜像层/" title="Docker镜像层" class="md-nav__link">
+      Docker镜像层
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      Java
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        Java
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-1" type="checkbox" id="nav-4-1">
+    
+    <label class="md-nav__link" for="nav-4-1">
+      集合
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-4-1">
+        集合
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Java/集合/ArrayList源码分析/" title="ArrayList源码分析" class="md-nav__link">
+      ArrayList源码分析
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Maven
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Maven
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Maven/Maven概述/" title="Maven概述" class="md-nav__link">
+      Maven概述
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Maven/Maven构建生命周期/" title="Maven构建生命周期" class="md-nav__link">
+      Maven构建生命周期
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Maven/MavenPOM简介/" title="MavenPOM简介" class="md-nav__link">
+      MavenPOM简介
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Maven/MavenProfile简介/" title="MavenProfile简介" class="md-nav__link">
+      MavenProfile简介
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      Others
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        Others
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Others/数字证书原理/" title="数字证书原理" class="md-nav__link">
+      数字证书原理
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7" checked>
+    
+    <label class="md-nav__link" for="nav-7">
+      Spring
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        Spring
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1" type="checkbox" id="nav-7-1" checked>
+    
+    <label class="md-nav__link" for="nav-7-1">
+      SpringSecurity
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-7-1">
+        SpringSecurity
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        SpringSecurity笔记
+      </label>
+    
+    <a href="./" title="SpringSecurity笔记" class="md-nav__link md-nav__link--active">
+      SpringSecurity笔记
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    基于数据库的登入认证
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spring-bootspringsecurity" class="md-nav__link">
+    在Spring-boot中使用SpringSecurity进行基于数据库的登入认证
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#springsecurity_1" class="md-nav__link">
+    SpringSecurity中的访问控制
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#springbootspringsecurity" class="md-nav__link">
+    在SpringBoot中使用SpringSecurity进行权限控制
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#springsecurity_2" class="md-nav__link">
+    SpringSecurity权限控制相关注解
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    参考
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-2" type="checkbox" id="nav-7-2">
+    
+    <label class="md-nav__link" for="nav-7-2">
+      Spring_DBs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-7-2">
+        Spring_DBs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Spring_DBs/SpringDataJpa笔记/" title="SpringDataJpa笔记" class="md-nav__link">
+      SpringDataJpa笔记
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Spring_DBs/Spring整合Redis/" title="Spring-boot集成Redis" class="md-nav__link">
+      Spring-boot集成Redis
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-3" type="checkbox" id="nav-7-3">
+    
+    <label class="md-nav__link" for="nav-7-3">
+      Spring基础知识
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-7-3">
+        Spring基础知识
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Spring基础知识/DispatcherServlet源码分析/" title="DispatcherServlet源码分析" class="md-nav__link">
+      DispatcherServlet源码分析
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-8" type="checkbox" id="nav-8">
+    
+    <label class="md-nav__link" for="nav-8">
+      Web
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-8">
+        Web
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Web/Servlet概述/" title="Servlet笔记" class="md-nav__link">
+      Servlet笔记
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-9" type="checkbox" id="nav-9">
+    
+    <label class="md-nav__link" for="nav-9">
+      Work-related
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-9">
+        Work-related
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-9-1" type="checkbox" id="nav-9-1">
+    
+    <label class="md-nav__link" for="nav-9-1">
+      Ovirt
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-9-1">
+        Ovirt
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Work-related/Ovirt/[OvirtEngine]Dao层测试/" title="[OvirtEngine]Dao层测试" class="md-nav__link">
+      [OvirtEngine]Dao层测试
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Work-related/Ovirt/[OvirtEngine]RestApi整理/" title="[OvirtEngine]RestApi整理" class="md-nav__link">
+      [OvirtEngine]RestApi整理
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Work-related/Ovirt/[OvirtEngine]锁机制/" title="[OvirtEngine]锁机制" class="md-nav__link">
+      [OvirtEngine]锁机制
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    基于数据库的登入认证
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spring-bootspringsecurity" class="md-nav__link">
+    在Spring-boot中使用SpringSecurity进行基于数据库的登入认证
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#springsecurity_1" class="md-nav__link">
+    SpringSecurity中的访问控制
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#springbootspringsecurity" class="md-nav__link">
+    在SpringBoot中使用SpringSecurity进行权限控制
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#springsecurity_2" class="md-nav__link">
+    SpringSecurity权限控制相关注解
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    参考
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/ginkoc/docs/edit/master/docs/Spring/SpringSecurity/SpringSecurtiy源码分析.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="springsecurity">SpringSecurity笔记</h1>
+<p>SpringSecurity权限验证是通过一系列的过滤器（Filter）来实现的，但从容器的角度来看在过滤链中它表现为一个<code>Filter</code>，其类型是<code>FilterChainProxy</code>。换句话说，SpringSecurity是一个单独的物理过滤器，但是它将请求委托给一系列的内部过滤器，如下图所示：</p>
+<p><img alt="filters" src="../../../images/security-filters.png" /></p>
+<p>SpringSecurity的内部过滤器链如下：</p>
+<table>
+<thead>
+<tr>
+<th>别名</th>
+<th>类名称</th>
+<th>Namespace Element or Attribute</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CHANNEL_FILTER</td>
+<td>ChannelProcessingFilter</td>
+<td>http/intercept-url<a href="https://github.com/requires">@requires</a>-channel</td>
+</tr>
+<tr>
+<td>SECURITY_CONTEXT_FILTER</td>
+<td>SecurityContextPersistenceFilter</td>
+<td>http</td>
+</tr>
+<tr>
+<td>CONCURRENT_SESSION_FILTER</td>
+<td>ConcurrentSessionFilter</td>
+<td>session-management/concurrency-control</td>
+</tr>
+<tr>
+<td>HEADERS_FILTER</td>
+<td>HeaderWriterFilter</td>
+<td>http/headers</td>
+</tr>
+<tr>
+<td>CSRF_FILTER</td>
+<td>CsrfFilter</td>
+<td>http/csrf</td>
+</tr>
+<tr>
+<td>LOGOUT_FILTER</td>
+<td>LogoutFilter</td>
+<td>http/logout</td>
+</tr>
+<tr>
+<td>X509_FILTER</td>
+<td>X509AuthenticationFilter</td>
+<td>http/x509</td>
+</tr>
+<tr>
+<td>PRE_AUTH_FILTER</td>
+<td>AbstractPreAuthenticatedProcessingFilter( Subclasses)</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>CAS_FILTER</td>
+<td>CasAuthenticationFilter</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>FORM_LOGIN_FILTER</td>
+<td>UsernamePasswordAuthenticationFilter</td>
+<td>http/form-login</td>
+</tr>
+<tr>
+<td>BASIC_AUTH_FILTER</td>
+<td>BasicAuthenticationFilter</td>
+<td>http/http-basic</td>
+</tr>
+<tr>
+<td>SERVLET_API_SUPPORT_FILTER</td>
+<td>SecurityContextHolderAwareRequestFilter</td>
+<td>http/<a href="https://github.com/servlet">@servlet</a>-api-provision</td>
+</tr>
+<tr>
+<td>JAAS_API_SUPPORT_FILTER</td>
+<td>JaasApiIntegrationFilter</td>
+<td>http/<a href="https://github.com/jaas">@jaas</a>-api-provision</td>
+</tr>
+<tr>
+<td>REMEMBER_ME_FILTER</td>
+<td>RememberMeAuthenticationFilter</td>
+<td>http/remember-me</td>
+</tr>
+<tr>
+<td>ANONYMOUS_FILTER</td>
+<td>AnonymousAuthenticationFilter</td>
+<td>http/anonymous</td>
+</tr>
+<tr>
+<td>SESSION_MANAGEMENT_FILTER</td>
+<td>SessionManagementFilter</td>
+<td>session-management</td>
+</tr>
+<tr>
+<td>EXCEPTION_TRANSLATION_FILTER</td>
+<td>ExceptionTranslationFilter</td>
+<td>http</td>
+</tr>
+<tr>
+<td>FILTER_SECURITY_INTERCEPTOR</td>
+<td>FilterSecurityInterceptor</td>
+<td>http</td>
+</tr>
+<tr>
+<td>SWITCH_USER_FILTER</td>
+<td>SwitchUserFilter</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p>过滤器的过滤顺序自上而下，按顺序执行。</p>
+<h2 id="_1">基于数据库的登入认证</h2>
+<p>spring security基于数据库的登录认证使用的默认过滤器为<code>UsernamePasswordAuthenticationFilter</code>类，该类继承自<code>AbstractAuthenticationProcessingFilter</code>抽象类。</p>
+<p><code>AbstractAuthenticationProcessingFilter</code>抽象类通过doFilter封装了登入认证的基本逻辑，子类实现其中的抽象方法进行认证，该类doFilter方法如下：</p>
+<pre><code class="java">/**
+     * 调用 #requiresAuthentication(HttpServletRequest, HttpServletResponse) 决定是否需要进行验证操作。
+     * 如果需要验证，则会调用 #attemptAuthentication(HttpServletRequest, HttpServletResponse) 方法。
+     * 有三种结果：
+     * 1、返回一个 Authentication 对象。
+     * 配置的 SessionAuthenticationStrategy` 将被调用，
+     * 然后 然后调用 #successfulAuthentication(HttpServletRequest，HttpServletResponse，FilterChain，Authentication) 方法。
+     * 2、验证时发生 AuthenticationException。
+     * #unsuccessfulAuthentication(HttpServletRequest, HttpServletResponse, AuthenticationException) 方法将被调用。
+     * 3、返回Null，表示身份验证不完整。假设子类做了一些必要的工作（如重定向）来继续处理验证，方法将立即返回。
+     * 假设后一个请求将被这种方法接收，其中返回的Authentication对象不为空。
+     */
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
+            throws IOException, ServletException {
+
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) res;
+
+        //判断是否要进行验证，即判断url是否为&quot;/login&quot;(你设置的登入url)并且请求方法是否为post
+        if (!requiresAuthentication(request, response)) {
+            chain.doFilter(request, response);
+
+            return;
+        }
+
+        if (logger.isDebugEnabled()) {
+            logger.debug(&quot;Request is to process authentication&quot;);
+        }
+
+        Authentication authResult;
+
+        try {
+            //该方法为抽象方法由子类实现
+            authResult = attemptAuthentication(request, response);
+            if (authResult == null) {
+                // return immediately as subclass has indicated that it hasn't completed
+                // authentication
+                return;
+            }
+            sessionStrategy.onAuthentication(authResult, request, response);
+        }
+        catch (InternalAuthenticationServiceException failed) {
+            logger.error(
+                    &quot;An internal error occurred while trying to authenticate the user.&quot;,
+                    failed);
+            unsuccessfulAuthentication(request, response, failed);
+
+            return;
+        }
+        catch (AuthenticationException failed) {
+            // Authentication failed
+            unsuccessfulAuthentication(request, response, failed);
+
+            return;
+        }
+
+        // Authentication success
+        if (continueChainBeforeSuccessfulAuthentication) {
+            chain.doFilter(request, response);
+        }
+
+        successfulAuthentication(request, response, chain, authResult);
+    }
+</code></pre>
+
+<p>上文提到了<code>AbstractAuthenticationProcessingFilter</code>抽象类在SpringSecurity的默认实现为<code>UsernamePasswordAuthenticationFilter</code>，因此将调用的<code>UsernamePasswordAuthenticationFilter</code>类的<code>#attemptAuthentication</code>方法，该方法主要作用是提取request中的账户（username）和密码（password）属性生成 UsernamePasswordAuthenticationToken 对象，交给<code>AuthenticationManager</code> 进行验证（即调用this.getAuthenticationManager().authenticate(authRequest) ）。代码如下：</p>
+<pre><code class="java">public Authentication attemptAuthentication(HttpServletRequest request,
+            HttpServletResponse response) throws AuthenticationException {
+        if (postOnly &amp;&amp; !request.getMethod().equals(&quot;POST&quot;)) {
+            throw new AuthenticationServiceException(
+                    &quot;Authentication method not supported: &quot; + request.getMethod());
+        }
+
+        //从request中获得账户和密码
+        String username = obtainUsername(request);
+        String password = obtainPassword(request);
+
+        if (username == null) {
+            username = &quot;&quot;;
+        }
+
+        if (password == null) {
+            password = &quot;&quot;;
+        }
+
+        // 删除头尾的空格
+        username = username.trim();
+
+        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
+                username, password);
+
+        // Allow subclasses to set the &quot;details&quot; property
+        setDetails(request, authRequest);
+
+        return this.getAuthenticationManager().authenticate(authRequest);
+    }
+</code></pre>
+
+<p>在默认情况下<code>UsernamePasswordAuthenticationFilter</code>类持有的AuthenticationManager实例对象为<code>ProviderManager</code>，该类的<code>#authenticate</code>方法遍历所有的AuthenticationProvider，并选择符合条件的Provider调用其验证方法。代码如下：</p>
+<pre><code class="java">/**
+     * 尝试验证 Authentication 对象
+     * AuthenticationProvider 列表将被连续尝试，直到 AuthenticationProvider 表示它能够认证传递的过来的Authentication 对象。然后将使用该 AuthenticationProvider 尝试身份验证。
+     * 如果有多个 AuthenticationProvider 支持验证传递过来的Authentication 对象，那么由第一个来确定结果，覆盖早期支持AuthenticationProviders 所引发的任何可能的AuthenticationException。 成功验证后，将不会尝试后续的AuthenticationProvider。
+     * 如果最后所有的 AuthenticationProviders 都没有成功验证 Authentication 对象，将抛出 AuthenticationException。
+     */
+public Authentication authenticate(Authentication authentication)
+    throws AuthenticationException {
+    Class&lt;? extends Authentication&gt; toTest = authentication.getClass();
+    AuthenticationException lastException = null;
+    Authentication result = null;
+    boolean debug = logger.isDebugEnabled();
+
+    for (AuthenticationProvider provider : getProviders()) {
+        if (!provider.supports(toTest)) {
+            continue;
+        }
+
+        if (debug) {
+            logger.debug(&quot;Authentication attempt using &quot;
+                         + provider.getClass().getName());
+        }
+
+        try {
+            result = provider.authenticate(authentication);
+
+            if (result != null) {
+                copyDetails(authentication, result);
+                break;
+            }
+        }
+        catch (AccountStatusException e) {
+            prepareException(e, authentication);
+            // SEC-546: Avoid polling additional providers if auth failure is due to
+            // invalid account status
+            throw e;
+        }
+        catch (InternalAuthenticationServiceException e) {
+            prepareException(e, authentication);
+            throw e;
+        }
+        catch (AuthenticationException e) {
+            lastException = e;
+        }
+    }
+
+    if (result == null &amp;&amp; parent != null) {
+        // Allow the parent to try.
+        try {
+            result = parent.authenticate(authentication);
+        }
+        catch (ProviderNotFoundException e) {
+            // ignore as we will throw below if no other exception occurred prior to
+            // calling parent and the parent
+            // may throw ProviderNotFound even though a provider in the child already
+            // handled the request
+        }
+        catch (AuthenticationException e) {
+            lastException = e;
+        }
+    }
+
+    if (result != null) {
+        if (eraseCredentialsAfterAuthentication
+            &amp;&amp; (result instanceof CredentialsContainer)) {
+            // Authentication is complete. Remove credentials and other secret data
+            // from authentication
+            ((CredentialsContainer) result).eraseCredentials();
+        }
+
+        eventPublisher.publishAuthenticationSuccess(result);
+        return result;
+    }
+
+    // Parent was null, or didn't authenticate (or throw an exception).
+
+    if (lastException == null) {
+        lastException = new ProviderNotFoundException(messages.getMessage(
+            &quot;ProviderManager.providerNotFound&quot;,
+            new Object[] { toTest.getName() },
+            &quot;No AuthenticationProvider found for {0}&quot;));
+    }
+
+    prepareException(lastException, authentication);
+
+    throw lastException;
+}
+</code></pre>
+
+<p>通过上面的代码可以看出，验证的核心代码为：</p>
+<pre><code class="java">result = provider.authenticate(authentication);
+</code></pre>
+
+<p>SpringSecurity中处理UsernamePasswordAuthenticationToken的AuthenticationProvider是抽象类<code>AbstractUserDetailsAuthenticationProvider</code>的子类，该类的<code>#authenticate</code>方法代码如下：</p>
+<pre><code class="java">// 验证 authentication
+public Authentication authenticate(Authentication authentication)
+            throws AuthenticationException {
+        Assert.isInstanceOf(UsernamePasswordAuthenticationToken.class, authentication,
+                messages.getMessage(
+                        &quot;AbstractUserDetailsAuthenticationProvider.onlySupports&quot;,
+                        &quot;Only UsernamePasswordAuthenticationToken is supported&quot;));
+
+        // Determine username
+        String username = (authentication.getPrincipal() == null) ? &quot;NONE_PROVIDED&quot;
+                : authentication.getName();
+
+        boolean cacheWasUsed = true;
+        //这里使用了缓存机制，先在缓存中查找用户是否存在（默认缓存为NullUserCache，即不做缓存）
+        UserDetails user = this.userCache.getUserFromCache(username);
+
+        if (user == null) {
+            cacheWasUsed = false;
+
+            try {
+                //如果用户不存在则调用retrieveUser方法
+                //retrieveUser方法为抽象方法，由子类实现
+                user = retrieveUser(username,
+                        (UsernamePasswordAuthenticationToken) authentication);
+            }
+            catch (UsernameNotFoundException notFound) {
+                logger.debug(&quot;User '&quot; + username + &quot;' not found&quot;);
+
+                if (hideUserNotFoundExceptions) {
+                    throw new BadCredentialsException(messages.getMessage(
+                            &quot;AbstractUserDetailsAuthenticationProvider.badCredentials&quot;,
+                            &quot;Bad credentials&quot;));
+                }
+                else {
+                    throw notFound;
+                }
+            }
+
+            Assert.notNull(user,
+                    &quot;retrieveUser returned null - a violation of the interface contract&quot;);
+        }
+
+        try {
+            preAuthenticationChecks.check(user);
+            additionalAuthenticationChecks(user,
+                    (UsernamePasswordAuthenticationToken) authentication);
+        }
+        catch (AuthenticationException exception) {
+            if (cacheWasUsed) {
+                //这里涉及到一个问题
+                //从缓存中获得的用户可能不是最新的用户信息，因此在验证失败后还会进行一次验证
+                cacheWasUsed = false;
+                user = retrieveUser(username,
+                        (UsernamePasswordAuthenticationToken) authentication);
+                preAuthenticationChecks.check(user);
+                additionalAuthenticationChecks(user,
+                        (UsernamePasswordAuthenticationToken) authentication);
+            }
+            else {
+                throw exception;
+            }
+        }
+
+        postAuthenticationChecks.check(user);
+
+        if (!cacheWasUsed) {
+            this.userCache.putUserInCache(user);
+        }
+
+        Object principalToReturn = user;
+
+        if (forcePrincipalAsString) {
+            principalToReturn = user.getUsername();
+        }
+
+        return createSuccessAuthentication(principalToReturn, authentication, user);
+    }
+</code></pre>
+
+<p>从上面的代码可以看出<code>AbstractUserDetailsAuthenticationProvider</code>使用了缓存机制，现在缓存中获取用户，如果用户不存在则调用<code>#retrieveUser</code>获得，然后再与传入的用户信息进行比对。这里有一点需要注意，在验证失败后SpringSecurity又进行了一次验证，目的是防止缓存中的信息过时。</p>
+<p>其中的<code>#retrieveUser</code>方法为抽象方法，在SpringSecurity中由<code>AbstractUserDetailsAuthenticationProvider</code>的默认子类<code>DaoAuthenticationProvider</code>实现。代码如下：</p>
+<pre><code class="java">protected final UserDetails retrieveUser(String username,
+                                         UsernamePasswordAuthenticationToken authentication)
+    throws AuthenticationException {
+    UserDetails loadedUser;
+
+    try {
+        //调用UserDetailsService的loadUserByUsername方法从数据库获得用户
+        loadedUser = this.getUserDetailsService().loadUserByUsername(username);
+    }
+    catch (UsernameNotFoundException notFound) {
+        if (authentication.getCredentials() != null) {
+            String presentedPassword = authentication.getCredentials().toString();
+            passwordEncoder.isPasswordValid(userNotFoundEncodedPassword,
+                                            presentedPassword, null);
+        }
+        throw notFound;
+    }
+    catch (Exception repositoryProblem) {
+        throw new InternalAuthenticationServiceException(
+            repositoryProblem.getMessage(), repositoryProblem);
+    }
+
+    if (loadedUser == null) {
+        throw new InternalAuthenticationServiceException(
+            &quot;UserDetailsService returned null, which is an interface contract violation&quot;);
+    }
+    return loadedUser;
+}
+</code></pre>
+
+<p>可以看出此处的返回对象 <code>userDetails</code> 是由 <code>UserDetailsService</code> 的 <code>#loadUserByUsername(username)</code> 来获取的。而UserDetailsService又是从何而来呢？实际上，<code>UserDetailsService</code> 是在SpringSecurity相关配置中定义的，下文会使用简单的例子进行说明。</p>
+<h2 id="spring-bootspringsecurity">在Spring-boot中使用SpringSecurity进行基于数据库的登入认证</h2>
+<p>首先，在<code>pom.xml</code>文件中添加SpringSecurity依赖，如下：</p>
+<pre><code class="xml">&lt;dependencies&gt;
+    ...
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+    ...
+&lt;/dependencies&gt;
+</code></pre>
+
+<p>接着，对SpringSecurity进行配置，需要注意一下几点：</p>
+<ul>
+<li>在Spring-boot中使用SpringSecurity需要使用<a href="https://github.com/EnableWebSecurity">@EnableWebSecurity</a>注解，该注解需要配合@Configuration一起使用，用来标注SpringSecurity的配置类。</li>
+<li>SpringSecurity配置类需要实现<code>WebSecurityConfigurer</code>接口，或者继承自<code>WebSecurityConfigurerAdapter</code>。</li>
+<li>一般会选择继承<code>WebSecurityConfigurerAdapter</code>抽象类来使用SpringSecurity的默认配置，并且重写configure(AuthenticationManagerBuilder auth) 和 configure(HttpSecurity http)这两个方法来进行客户化配置。</li>
+</ul>
+<p>下面为SpringSecurity配置的例子：</p>
+<pre><code class="java">@Configuration
+@EnableWebSecurity
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @AutoWired
+    private UserDetailsService myUserDetailsService;
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+            .authorizeRequests()
+                .antMatchers(&quot;/&quot;, &quot;/home&quot;).permitAll()
+                .anyRequest().authenticated()
+                .and()
+            .formLogin()
+                .loginPage(&quot;/login&quot;)
+                .permitAll()
+                .and()
+            .logout()
+                .permitAll();
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder builder) throws Exception{
+        builder.userDetailsService(myUserDetailsService)
+                .passwordEncoder(passwordEncoder());
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+}
+</code></pre>
+
+<p>其中<code>configure(HttpSecurity)</code>方法主要负责配置资源和URL的权限控制，即配置哪些资源或URL需要授权（狭义上就是登入）以后才能访问，哪些资源或URL可以自由访问。具体以上面的例子来说，"/"和"/home"下的资源被配置为不需要进行任何身份验证即可访问，其他路径下的资源访问必须先经过身份验证；开启了表单登入功能，登入页面为"/login"也不需要进行身份验证即可访问，当未授权对需要授权资源进行访问时会跳转到指定的登入界面。</p>
+<p>而configure(AuthenticationManagerBuilder)方法从参数名就可以看出该方法对AuthenticationManagerBuilder进行配置，它可以使用内存方式（in-memory）、JDBC 或 LDAP、或自定义的<code>UserDetailService</code>来认证用户，从而影响到AuthenticationManager的属性。上面的例子中配置了授权认证过程的UserDetailsService对象以及密码加密对象，即在<a href="#基于数据库的登入验证">基于数据库的登入验证</a>部分<code>DaoAuthenticationProvider</code>获得的UserDetailsService在这里被设置了。你也可以通过以下方式直接对<code>DaoAuthenticationProvider</code>进行配置：</p>
+<pre><code class="java">@Configuration
+@EnableWebSecurity
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    private final UserDetailsService userDetailsService;
+
+    @Autowired
+    public SecurityConfiguration(@Qualifier(&quot;userService&quot;) UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth, PasswordEncoder passwordEncoder) throws Exception {
+        // 设置身份验证器
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userDetailsService);// 设置用户服务类
+        authenticationProvider.setPasswordEncoder(passwordEncoder); // 设置密码加密方式
+
+        auth.authenticationProvider(authenticationProvider);//设置authenticationProvider
+    }
+
+    ...//其他配置省略
+}
+
+</code></pre>
+
+<p>UserDetailsService实际上只是一个接口，其中定义了<code>#loadUserByUsername</code>方法用于返回用户信息，因此我们可以让UserService实现该接口，如下：</p>
+<pre><code class="java">@Service
+public class UserService implements UserDetailsService {
+
+    ...//省略其他方法
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        if(username == null){
+            throw new UsernameNotFoundException(&quot;用户名不能为空&quot;);
+        }
+        return userDao.findByName(username);
+    }
+}
+</code></pre>
+
+<p>上述配置完成后，SpringSecurity与数据库对象之间就建立了联系，当用户进行资源访问时会先去数据库获得该对象进行比对，判断是否有权限获得相应的资源。</p>
+<h2 id="springsecurity_1">SpringSecurity中的访问控制</h2>
+<p>在Spring Security中默认的访问控制的入口为<code>FilterSecurityInterceptor</code>过滤器，在Spring Security的过滤器链中该过滤器负责角色和权限的控制。</p>
+<p><code>FilterSecurityInterceptor</code>继承自<code>AbstractSecurityInterceptor</code>并且实现了Filter接口，该类的主要作用是作为Filter加入过滤链，主要的权限控制逻辑由<code>AbstractSecurityInterceptor</code>实现。它的doFilter方法，如下：</p>
+<pre><code class="java">/**
+ *使用request,response,filterChain构建FilterInvocation对象并传给invoke方法
+ */
+public void doFilter(ServletRequest request, ServletResponse response,
+            FilterChain chain) throws IOException, ServletException {
+        FilterInvocation fi = new FilterInvocation(request, response, chain);
+        invoke(fi);
+}
+</code></pre>
+
+<p>从上面的代码可以看出，<code>#invoke</code>方法为权限验证的入口，代码如下：</p>
+<pre><code class="java">/**
+ *先判断是否已经进行了权限验证
+ *如果没有进行过权限验证，则调用父类的beforeInvocation方法
+ */
+public void invoke(FilterInvocation fi) throws IOException, ServletException {
+    if ((fi.getRequest() != null)
+        &amp;&amp; (fi.getRequest().getAttribute(FILTER_APPLIED) != null)
+        &amp;&amp; observeOncePerRequest) { 
+        // filter already applied to this request and user wants us to observe
+        // once-per-request handling, so don't re-do security checking
+        fi.getChain().doFilter(fi.getRequest(), fi.getResponse());
+    }
+    else {
+        // first time this request being called, so perform security checking
+        if (fi.getRequest() != null &amp;&amp; observeOncePerRequest) {
+            fi.getRequest().setAttribute(FILTER_APPLIED, Boolean.TRUE);
+        }
+
+        //beforeInvocation为关键方法
+        //若该方法未抛出RuntimeException则说明权限认证成功，即使返回null对象
+        InterceptorStatusToken token = super.beforeInvocation(fi);
+
+        try {
+            fi.getChain().doFilter(fi.getRequest(), fi.getResponse());
+        }
+        finally {
+            super.finallyInvocation(token);
+        }
+
+        super.afterInvocation(token, null);
+    }
+}
+</code></pre>
+
+<p>从上面的代码中可以看出，该方法只是做了是否需要权限认证的判断工作，而主要的认证工作交给了父类的<code>#beforeInvocation</code>方法。这里有一个问题，request对象在每次请求时都会由Web容器重新创建，为什么上面的代码要进行一次是否已经进行权限认证的工作呢？猜测是考虑进行了请求转发的情况下，不需要的重新进行权限认证。继续往下看，<code>AbstractSecurityInterceptor</code>的<code>#beforeInvocation</code>方法如下：</p>
+<pre><code class="java">/**
+ *1.判断是否配置了支持传入对象的认证，若不支持则抛出异常
+ *2.获得SecurityMetadataSource的Attributes，Attributes中包含了本次请求（request）所需的权限级别
+ *3.判断是否需要进行登入认证，并返回Authentication对象
+ *4.调用AccessDecisionManager.decide()方法进行权限验证
+ */
+protected InterceptorStatusToken beforeInvocation(Object object) {
+    Assert.notNull(object, &quot;Object was null&quot;);
+    final boolean debug = logger.isDebugEnabled();
+
+    if (!getSecureObjectClass().isAssignableFrom(object.getClass())) {
+        throw new IllegalArgumentException(
+            &quot;Security invocation attempted for object &quot;
+            + object.getClass().getName()
+            + &quot; but AbstractSecurityInterceptor only configured to support secure objects of type: &quot;
+            + getSecureObjectClass());
+    }
+
+    //通过SecurityMetadataSource获得本次请求需要的权限
+    //权限是在SecurityConfiguration中由hasAnyAuthority、hasAnyRole或hasRole方法配置的
+    Collection&lt;ConfigAttribute&gt; attributes = this.obtainSecurityMetadataSource()
+        .getAttributes(object);
+
+    if (attributes == null || attributes.isEmpty()) {
+        if (rejectPublicInvocations) {
+            throw new IllegalArgumentException(
+                &quot;Secure object invocation &quot;
+                + object
+                + &quot; was denied as public invocations are not allowed via this interceptor. &quot;
+                + &quot;This indicates a configuration error because the &quot;
+                + &quot;rejectPublicInvocations property is set to 'true'&quot;);
+        }
+
+        if (debug) {
+            logger.debug(&quot;Public object - authentication not attempted&quot;);
+        }
+
+        publishEvent(new PublicInvocationEvent(object));
+
+        return null; // no further work post-invocation
+    }
+
+    if (debug) {
+        logger.debug(&quot;Secure object: &quot; + object + &quot;; Attributes: &quot; + attributes);
+    }
+
+    if (SecurityContextHolder.getContext().getAuthentication() == null) {
+        credentialsNotFound(messages.getMessage(
+            &quot;AbstractSecurityInterceptor.authenticationNotFound&quot;,
+            &quot;An Authentication object was not found in the SecurityContext&quot;),
+                            object, attributes);
+    }
+
+    // 判断是否需要进行登入认证，若需要则进行认证并返回Authentication对象，主要作用是返回Authentication对象
+    Authentication authenticated = authenticateIfRequired();
+
+    // Attempt authorization
+    try {
+        //权限验证的核心方法，调用AccessDecisionManager的decide方法进行权限认证，未抛出异常说明有权限
+        this.accessDecisionManager.decide(authenticated, object, attributes);
+    }
+    catch (AccessDeniedException accessDeniedException) {
+        publishEvent(new AuthorizationFailureEvent(object, attributes, authenticated,
+                                                   accessDeniedException));
+
+        throw accessDeniedException;
+    }
+
+    if (debug) {
+        logger.debug(&quot;Authorization successful&quot;);
+    }
+
+    if (publishAuthorizationSuccess) {
+        publishEvent(new AuthorizedEvent(object, attributes, authenticated));
+    }
+
+    // Attempt to run as a different user
+    Authentication runAs = this.runAsManager.buildRunAs(authenticated, object,
+                                                        attributes);
+
+    if (runAs == null) {
+        if (debug) {
+            logger.debug(&quot;RunAsManager did not change Authentication object&quot;);
+        }
+
+        // no further work post-invocation
+        return new InterceptorStatusToken(SecurityContextHolder.getContext(), false,
+                                          attributes, object);
+    }
+    else {
+        if (debug) {
+            logger.debug(&quot;Switching to RunAs Authentication: &quot; + runAs);
+        }
+
+        SecurityContext origCtx = SecurityContextHolder.getContext();
+        SecurityContextHolder.setContext(SecurityContextHolder.createEmptyContext());
+        SecurityContextHolder.getContext().setAuthentication(runAs);
+
+        // need to revert to token.Authenticated post-invocation
+        return new InterceptorStatusToken(origCtx, true, attributes, object);
+    }
+}
+</code></pre>
+
+<p>从上面代码可以看出权限验证的核心方法为<code>AccessDecisionManager#decide</code>，<code>#decide</code>方法接口代码如下：</p>
+<pre><code class="java">void decide(Authentication authentication, Object object,
+            Collection&lt;ConfigAttribute&gt; configAttributes) throws AccessDeniedException,
+            InsufficientAuthenticationException;
+</code></pre>
+
+<p>显而易见该方法需要传入三个参数：</p>
+<ol>
+<li><code>Authentication</code>，在登入认证完成后返回的凭证，确定访问当前资源的用户，并且从凭证可以获取当前用户所拥有的权限（需要在<code>UserDetailsService#loadUserByUsername</code> 方法中设置）。</li>
+<li><code>Object</code>，实际上为FilterInvocation对象它持有request对象的引用，即当前被访问的资源。</li>
+<li><code>Collection&lt;ConfigAttribute&gt;</code>，访问资源要求的权限，在SpringSecurity配置中进行设置。</li>
+</ol>
+<p>所以<code>AccessDecisionManager</code>的<code>#decide</code>方法的主要思路是从<code>Authentication</code>获得当前用户所拥有的权限，再与访问当前资源（object）所需要的权限进行比对，即可判断当前认证用户是否能够访问该资源。</p>
+<p>Spring Security引入了投票器（voter）的概念，真正的权限认证工作由<code>AccessDecisionManager</code>中的一组<code>AccessDecisionVoter</code>来实现，有无权限访问的最终觉得权是由投票器来决定的。<code>AccessDecisionManager</code>维护着一个<code>AccessDecisionVoter</code>列表参与授权的投票。根据处理投票的策略不同Spring Security中<code>AccessDecisionManager</code>有3个不同的实现：</p>
+<ol>
+<li>UnanimousBased（全票通过）：所有投票器都通过才允许访问资源。</li>
+<li>ConsensusBased（少数服从多数）：超过一半的投票器通过才允许访问资源。</li>
+<li>AffirmativeBased（一票通过）：只要有一个投票器投票通过，就允许访问资源。AffirmativeBased为默认的AccessDecisionManager。</li>
+</ol>
+<p>下面以<code>AffirmativeBased</code>的<code>#decide</code>方法为例进行简要说明，代码如下：</p>
+<pre><code class="java">public void decide(Authentication authentication, Object object,
+            Collection&lt;ConfigAttribute&gt; configAttributes) throws AccessDeniedException {
+        int deny = 0;
+
+        //遍历voter列表，循环调用vote的方法
+        for (AccessDecisionVoter voter : getDecisionVoters()) {
+            int result = voter.vote(authentication, object, configAttributes);
+
+            if (logger.isDebugEnabled()) {
+                logger.debug(&quot;Voter: &quot; + voter + &quot;, returned: &quot; + result);
+            }
+
+            switch (result) {
+            case AccessDecisionVoter.ACCESS_GRANTED:
+                return; //当有result为ACCESS_GRANTED则权限认证成功
+
+            case AccessDecisionVoter.ACCESS_DENIED:
+                deny++;
+
+                break;
+
+            default:
+                break;
+            }
+        }
+
+        if (deny &gt; 0) {
+            throw new AccessDeniedException(messages.getMessage(
+                    &quot;AbstractAccessDecisionManager.accessDenied&quot;, &quot;Access is denied&quot;));
+        }
+
+        // To get this far, every AccessDecisionVoter abstained
+        checkAllowIfAllAbstainDecisions();
+    }
+</code></pre>
+
+<p>可以看出<code>#decide</code>方法只是循环调用了<code>AccessDecisionVoter</code>的<code>#vote</code>，该方法会返回一个投票结果，当有一个voter的投票结果为ACCESS_GRANTED时，则权限认证成功；如果所有的投票结果中都没有ACCESS_GRANTED时，抛出AccessDeniedException异常表明认证失败。</p>
+<p>Spring Security提供几个缺省的AccessDecisionVoter，它们分别对应不同的SpringSecurity配置，下面对常用的两个投票器进行说明：</p>
+<ol>
+<li>RoleVoter，最常见的投票器，在RoleVoter中定义了权限的前缀（默认为"ROLE_"），当配置中有以权限前缀开头的配置时<code>#vote</code>方法才会进行投票，否则弃权。</li>
+<li>AuthenticatedVoter，当配置中有以下配置时才会进行投票，否则弃权：<ul>
+<li>IS_AUTHENTICATED_ANONYMOUSLY 允许匿名用户访问</li>
+<li>IS_AUTHENTICATED_FULLY 允许登录用户访问</li>
+<li>IS_AUTHENTICATED_REMEMBERED 允许登录用户和rememberMe用户访问</li>
+</ul>
+</li>
+</ol>
+<h2 id="springbootspringsecurity">在SpringBoot中使用SpringSecurity进行权限控制</h2>
+<p>从源码中可以得出结论，SpringSecurity的权限控制需要使用者做的工作至少有以下两个：</p>
+<ol>
+<li>配置访问具体的URL需要的角色或者权限；</li>
+<li>在用户登入验证时，将其拥有的权限交给<code>UserDetails</code>对象。</li>
+</ol>
+<p>下面将使用SpringBoot + SpringDataJPA + SpringSecurity为技术框架进行一个简单说明。</p>
+<p>SysUser为系统用户对象，其角色使用枚举类RoleType表示，并且存在数据库中。</p>
+<pre><code class="java">@Entity(name = &quot;user&quot;)
+public class SysUser {
+
+    @Id
+    @GenericGenerator(name = &quot;uuid2&quot;, strategy = &quot;org.hibernate.id.UUIDGenerator&quot;)
+    @GeneratedValue(generator = &quot;uuid2&quot;)
+    @Column(name = &quot;user_uuid&quot;, columnDefinition = &quot;uuid&quot;)
+    private UUID uuid;
+
+    @Column(name = &quot;user_name&quot;, unique = true, nullable = false, length = 64)
+    protected String username;
+
+    @Column(name = &quot;role_type&quot;, nullable = false)
+    @Enumerated(EnumType.STRING)
+    protected RoleType role;
+
+    @Column(name = &quot;password&quot;)
+    private String password;
+
+    //getter、setter
+}
+</code></pre>
+
+<p>RoleType为枚举类，在系统中代表用户的角色类型。</p>
+<pre><code class="java">public enum RoleType {
+
+    SUPER_ADMIN(0,&quot;超级管理员&quot;,&quot;super_admin&quot;,true,true),
+    ADMIN(1,&quot;管理员&quot;,&quot;admin&quot;,true,true),
+    GUEST(99,&quot;游客&quot;,&quot;guest&quot;, false, false);
+
+    private int value;
+    private String name;
+    private String roleName;
+    private boolean isLogin;
+    private boolean isAdmin;
+}
+</code></pre>
+
+<p>UserService是系统获取用户信息的Service类，实现的SpringSecurity的UserDetailsService接口，它实现了<code>#loadUserByUsername</code>方法是SpringSecurity实现登入和权限认证的关键方法，需要返回<code>User</code>的具体信息（包括权限）。</p>
+<pre><code class="java">@Service
+public class UserDetailService implements UserDetailsService {
+
+    private final UserRepository userRepository; //在JPA中相当于dao，这里不展开说明　　　　　
+
+    @Autowired
+    public UserDetailService(UserRepository userRepository){
+        this.repository = userRepository;
+    }
+
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        SysUser user = repository.findUserByUsername(username);
+        if (user==null)
+            throw new UsernameNotFoundException(&quot;用户名或密码错误&quot;);　//抛出异常，会根据配置跳到登录失败页面
+        List&lt;GrantedAuthority&gt; authorities = getRoles(user);　//获取用户权限
+
+        org.springframework.security.core.userdetails.User 
+            auth_user = new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), list);　　　　　　//将权限传递给UserDetails
+        return auth_user;
+    }
+
+    /**根据用户返回他的权限列表*/
+    public List&lt;GrantedAuthority&gt; getRoles(SysUser user){
+        List&lt;GrantedAuthority&gt; authorities = new ArrayList&lt;&gt;();
+        //SpringSecurity对角色的认证需要以&quot;ROLE_&quot;作为开头，可以设置
+        String role = &quot;ROLE_&quot; + user.getRoleType().name();
+        authorities.add(new SimpleGrantedAuthority(role));
+        return authorities;
+    }
+}
+</code></pre>
+
+<p>配置SpringSecurity</p>
+<p>在SpringBoot中可以通过继承<code>WebSecurityConfigurerAdapter</code>类并使用<code>@Configuration</code>和<code>@EnableWebSecurity</code>注解来配置SpringSecurity，如下：</p>
+<pre><code class="java">@Configuration
+@EnableWebSecurity
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter{　　　　　　　　　　
+
+    @Autowired
+    private UserDetailService userDetailService;//即我们实现的UserService
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                    //管理员页面只允许拥有ADMIN,SUPER_ADMIN角色的用户访问
+                    //这里的&quot;ADMIN&quot;不需要加&quot;ROLE_&quot;前缀是因为hasAnyRole方法会默认添加&quot;ROLE_&quot;前缀
+                    .antMatchers(&quot;/admin.html&quot;).hasAnyRole(&quot;ADMIN&quot;,&quot;SUPER_ADMIN&quot;)
+                    .anyRequest()
+                        .authenticated()
+                        .accessDecisionManager(buildDecisionManager())
+                    .and()
+                .formLogin()
+                    //登入页面,为登入时会跳转到该页面
+                    .loginPage(&quot;/login.html&quot;)
+                    .permitAll()
+                    //SpringSecurity接受登入请求的url，默认为&quot;/login&quot;
+                    .loginProcessingUrl(&quot;/login&quot;)　　
+                    .and()
+                .logout()
+                      //SpringSecurity接受登出请求的url，默认为&quot;/logout&quot;
+　　　　　　　　　　　　.logoutUrl(&quot;/logout&quot;)
+                      .permitAll();
+    }
+
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailService);　//配置自定义userDetailService
+    }
+
+    @Bean
+    public AccessDecisionManager buildDecisionManager() {
+        //对AccessDecisionManager进行客户化配置
+        //这里使用AffirmativeBased（一票通过）管理器
+        //并且只配置了RoleVoter，只进行角色限制
+        List&lt;AccessDecisionVoter&lt;? extends Object&gt;&gt; decisionVoters = Arrays.asList（new RoleVoter());
+        return new AffirmativeBased(decisionVoters);
+    }
+
+}
+</code></pre>
+
+<p>如上配置类所示，我们对admin.html的访问加了角色限制，只有为角色"ADMIN"或"SUPER_ADMIN"的用户可以访问该页面，并且对<code>AccessDecisionManager</code>客户化的配置，权限管理器使用了AffirmativeBased并且它的投票者只有RoleVoter。</p>
+<h2 id="springsecurity_2">SpringSecurity权限控制相关注解</h2>
+<h2 id="_2">参考</h2>
+<p><a href="http://www.spring4all.com/article/420">http://www.spring4all.com/article/420</a></p>
+<p><a href="https://elim.iteye.com/blog/2247057">https://elim.iteye.com/blog/2247057</a></p>
+<p><a href="https://blog.csdn.net/neweastsun/article/details/80633421">https://blog.csdn.net/neweastsun/article/details/80633421</a></p>
+<p><a href="https://www.cnblogs.com/scau-chm/p/5967931.html">https://www.cnblogs.com/scau-chm/p/5967931.html</a></p>
+                
+                  
+                
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../../../Others/数字证书原理/" title="数字证书原理" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                数字证书原理
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../../Spring_DBs/SpringDataJpa笔记/" title="SpringDataJpa笔记" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                SpringDataJpa笔记
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/application.808e90bb.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"../../.."}})</script>
+      
+    
+  </body>
+</html>

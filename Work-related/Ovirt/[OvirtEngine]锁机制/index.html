@@ -1,0 +1,1287 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.0">
+    
+    
+      
+        <title>[OvirtEngine]锁机制 - Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/application.1b62728e.css">
+      
+      
+    
+    
+      <script src="../../../assets/javascripts/modernizr.268332fc.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+    
+    
+  </head>
+  
+    <body dir="ltr">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#enginelock" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../../.." title="Notes" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              Notes
+            </span>
+            <span class="md-header-nav__topic">
+              
+                [OvirtEngine]锁机制
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/ginkoc/docs/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../../.." title="Notes" class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </a>
+    Notes
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/ginkoc/docs/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      AOP
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        AOP
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../AOP/Aspectj切面织入/" title="Aspectj切面织入" class="md-nav__link">
+      Aspectj切面织入
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Docker
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Docker
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Docker/Docker镜像层/" title="Docker镜像层" class="md-nav__link">
+      Docker镜像层
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      Java
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        Java
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-1" type="checkbox" id="nav-4-1">
+    
+    <label class="md-nav__link" for="nav-4-1">
+      集合
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-4-1">
+        集合
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Java/集合/ArrayList源码分析/" title="ArrayList源码分析" class="md-nav__link">
+      ArrayList源码分析
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Maven
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Maven
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Maven/Maven概述/" title="Maven概述" class="md-nav__link">
+      Maven概述
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Maven/Maven构建生命周期/" title="Maven构建生命周期" class="md-nav__link">
+      Maven构建生命周期
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Maven/MavenPOM简介/" title="MavenPOM简介" class="md-nav__link">
+      MavenPOM简介
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Maven/MavenProfile简介/" title="MavenProfile简介" class="md-nav__link">
+      MavenProfile简介
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      Others
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        Others
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Others/数字证书原理/" title="数字证书原理" class="md-nav__link">
+      数字证书原理
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+    
+    <label class="md-nav__link" for="nav-7">
+      Spring
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        Spring
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-1" type="checkbox" id="nav-7-1">
+    
+    <label class="md-nav__link" for="nav-7-1">
+      SpringSecurity
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-7-1">
+        SpringSecurity
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Spring/SpringSecurity/SpringSecurtiy源码分析/" title="SpringSecurity笔记" class="md-nav__link">
+      SpringSecurity笔记
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-2" type="checkbox" id="nav-7-2">
+    
+    <label class="md-nav__link" for="nav-7-2">
+      Spring_DBs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-7-2">
+        Spring_DBs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Spring/Spring_DBs/SpringDataJpa笔记/" title="SpringDataJpa笔记" class="md-nav__link">
+      SpringDataJpa笔记
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Spring/Spring_DBs/Spring整合Redis/" title="Spring-boot集成Redis" class="md-nav__link">
+      Spring-boot集成Redis
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-3" type="checkbox" id="nav-7-3">
+    
+    <label class="md-nav__link" for="nav-7-3">
+      Spring基础知识
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-7-3">
+        Spring基础知识
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Spring/Spring基础知识/DispatcherServlet源码分析/" title="DispatcherServlet源码分析" class="md-nav__link">
+      DispatcherServlet源码分析
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-8" type="checkbox" id="nav-8">
+    
+    <label class="md-nav__link" for="nav-8">
+      Web
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-8">
+        Web
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../Web/Servlet概述/" title="Servlet笔记" class="md-nav__link">
+      Servlet笔记
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-9" type="checkbox" id="nav-9" checked>
+    
+    <label class="md-nav__link" for="nav-9">
+      Work-related
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-9">
+        Work-related
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-9-1" type="checkbox" id="nav-9-1" checked>
+    
+    <label class="md-nav__link" for="nav-9-1">
+      Ovirt
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-9-1">
+        Ovirt
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../[OvirtEngine]Dao层测试/" title="[OvirtEngine]Dao层测试" class="md-nav__link">
+      [OvirtEngine]Dao层测试
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../[OvirtEngine]RestApi整理/" title="[OvirtEngine]RestApi整理" class="md-nav__link">
+      [OvirtEngine]RestApi整理
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        [OvirtEngine]锁机制
+      </label>
+    
+    <a href="./" title="[OvirtEngine]锁机制" class="md-nav__link md-nav__link--active">
+      [OvirtEngine]锁机制
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#enginelock" class="md-nav__link">
+    EngineLock
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    锁资源竞争过程
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    锁的释放
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    只改变数据库状态的操作锁
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#enginelock" class="md-nav__link">
+    EngineLock
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    锁资源竞争过程
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    锁的释放
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    只改变数据库状态的操作锁
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/ginkoc/docs/edit/master/docs/Work-related/Ovirt/[OvirtEngine]锁机制.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                  <h1>[OvirtEngine]锁机制</h1>
+                
+                <h2 id="enginelock">EngineLock</h2>
+<p>OvirtEngine是通过 <strong>LockManager</strong>  接口，提供对 <strong>command</strong> 执行时对实际进行资源的加解锁，确保并发执行时的安全性。根据应用的特点，提供了两种类型的锁（ <strong>独占锁</strong> 和 <strong>共享锁</strong> ），封装在了 <strong>EngineLock</strong> 对象中。</p>
+<pre><code class="java">private Map&lt;String, Pair&lt;String, String&gt;&gt; exclusiveLocks;
+private Map&lt;String, Pair&lt;String, String&gt;&gt; sharedLocks;
+
+public EngineLock() {
+
+}
+
+public EngineLock(Map&lt;String, Pair&lt;String, String&gt;&gt; exclusiveLocks, Map&lt;String, Pair&lt;String, String&gt;&gt; sharedLocks) {
+    this.exclusiveLocks = exclusiveLocks;
+    this.sharedLocks = sharedLocks;
+}
+</code></pre>
+
+<p>独占锁 和 共享锁 都可以同时锁定多个资源，采用了 <strong>Map<String, Pair<String, String>&gt;</strong> 的数据结构，其中外层 Map 的 Key，存放了 加锁资源的 ID，例如虚拟机 ID。<strong>Pair Map Key</strong> 存放了锁定资源组的类型，如VM，<strong>Pair Map Value</strong> 中存放了锁竞争失败时给出的错误提示信息。</p>
+<p>资源组的类型如下：</p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>可锁定资源组类型名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>POOL</td>
+<td>池</td>
+</tr>
+<tr>
+<td>2</td>
+<td>VDS</td>
+<td>主机</td>
+</tr>
+<tr>
+<td>3</td>
+<td>VDS_INIT</td>
+<td>主机初始化</td>
+</tr>
+<tr>
+<td>4</td>
+<td>VDS_FENCE</td>
+<td>电源管理</td>
+</tr>
+<tr>
+<td>5</td>
+<td>VM</td>
+<td>虚拟机</td>
+</tr>
+<tr>
+<td>6</td>
+<td>TEMPLATE</td>
+<td>模版</td>
+</tr>
+<tr>
+<td>7</td>
+<td>DISK</td>
+<td>磁盘</td>
+</tr>
+<tr>
+<td>8</td>
+<td>VM_DISK_BOOT</td>
+<td>引导盘</td>
+</tr>
+<tr>
+<td>9</td>
+<td>VM_NAME</td>
+<td>虚拟机名称</td>
+</tr>
+<tr>
+<td>10</td>
+<td>NETWORK</td>
+<td>网络</td>
+</tr>
+<tr>
+<td>11</td>
+<td>STORAGE</td>
+<td>存储</td>
+</tr>
+<tr>
+<td>12</td>
+<td>STORAGE_CONNECTION</td>
+<td>存储连接</td>
+</tr>
+<tr>
+<td>13</td>
+<td>REGISTER_VDS</td>
+<td>注册主机</td>
+</tr>
+<tr>
+<td>14</td>
+<td>VM_SNAPSHOTS</td>
+<td>虚拟机快照</td>
+</tr>
+<tr>
+<td>15</td>
+<td>GLUSTER</td>
+<td>卷</td>
+</tr>
+<tr>
+<td>16</td>
+<td>USER_VM_POOL</td>
+<td>池分配虚拟机给用户</td>
+</tr>
+<tr>
+<td>17</td>
+<td>REMOTE_TEMPLATE</td>
+<td>导出模版</td>
+</tr>
+<tr>
+<td>18</td>
+<td>REMOTE_VM</td>
+<td>导出虚拟机</td>
+</tr>
+</tbody>
+</table>
+<p>在AbstractCommand中对获得独占锁方法getExclusiveLocks()和获得共享方法 getSharedLocks()都给出了默认的空实现，子类可以重写这两个方法来添加锁定的资源。</p>
+<h2 id="_1">锁资源竞争过程</h2>
+<p>在Ovirt的command类执行真的逻辑之前会对command的执行的条件进行初始化和校验工作，其中就涉及了对线程共享资源的限制，在执行命令前会尝试去获得锁，该方法在AbstractCommand中的实现如下：</p>
+<pre><code class="java">public boolean acquireLock() {
+    //从parameters中获得锁属性，如果parameters没有相应的参数，则使用默认值
+    //默认值包括锁范围为none，当锁竞争失败时不等待获取锁
+    //可以通过重写applyLockProperties方法对锁的属性进行修改
+    LockProperties lockProperties = getLockProperties();
+    boolean result = true;
+
+    //如果锁范围为none则不去尝试获得锁，视为获得锁成功
+    if (!Scope.None.equals(lockProperties.getScope())) {
+        //如果锁的范围为Execution，将releaseLocksAtEndOfExecute设为true
+        //releaseLocksAtEndOfExecute表示在command的Execute阶段结束释放锁
+        //command的多个阶段在这里不进行赘述
+        releaseLocksAtEndOfExecute = Scope.Execution.equals(lockProperties.getScope());
+
+        //判断是否等待获得锁，默认值为false
+        if (!lockProperties.isWait()) {
+            //由于默认值的原因，ovirt中大部分逻辑发生在这里
+            //当发生锁竞争时，放弃获得锁，command执行失败
+            result = acquireLockInternal();
+        } else {
+            //当发生锁竞争时，等待获得锁，然后继续执行commnad
+            acquireLockAndWait();
+        }
+    }
+    return result;
+}
+</code></pre>
+
+<p>由于acquireLockAndWait()方法与acquireLockInternal()方法逻辑上的最主要的区别只有锁竞争失败时是否继续等待获得锁（共享锁不需要等待），所以这里就只对主要执行逻辑acquireLockInternal()方法进行展开。</p>
+<pre><code class="java">protected boolean acquireLockInternal() {
+    //如果当前的command没有锁，则创建一个新锁，否则很可能已经获得了父命令的锁。
+    if (context.getLock() == null) {
+        //没有锁则构建EngineLock
+        EngineLock lock = buildLock();
+        //如果构建的锁不为空才继续尝试获得锁
+        //即如果子类没有重写getExclusiveLocks()或者getSharedLocks()来添加锁，则视为获得锁成功
+        if (lock != null) {
+            //通过LockManager来尝试获得锁
+            Pair&lt;Boolean, Set&lt;String&gt;&gt; lockAcquireResult = getLockManager().acquireLock(lock);
+            if (lockAcquireResult.getFirst()) {
+                log.info(&quot;Lock Acquired to object '{}'&quot;, lock);
+                //获得锁成功后将context锁设置为构造的锁
+                context.withLock(lock);
+            } else {
+                log.info(&quot;Failed to Acquire Lock to object '{}'&quot;, lock);
+                getReturnValue().getValidationMessages()
+                    .addAll(extractVariableDeclarations(lockAcquireResult.getSecond()));
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+private EngineLock buildLock() {
+    EngineLock lock = null;
+    //这个两个方法默认返回值为null，由子类重写来加锁
+    Map&lt;String, Pair&lt;String, String&gt;&gt; exclusiveLocks = getExclusiveLocks();
+    Map&lt;String, Pair&lt;String, String&gt;&gt; sharedLocks = getSharedLocks();
+    //如果子类没有重写其中任何一个方法，则不进行锁的构建
+    if (exclusiveLocks != null || sharedLocks != null) {
+        lock = new EngineLock(exclusiveLocks, sharedLocks);
+    }
+    return lock;
+}
+</code></pre>
+
+<p>从上面的代码可以看，出如果当前的command拥有锁，则说明使用父command的锁；如果当前command没有锁，则构建新的锁，锁的构建与子类是否重写了getExclusiveLocks()或者getSharedLocks()来添加锁有关，若没重写任何方法来添加锁则视为获得锁成功，否则调用LockManager的<strong>acquireLock</strong>方法来尝试获得锁。</p>
+<pre><code class="java">public Pair&lt;Boolean, Set&lt;String&gt;&gt; acquireLock(EngineLock lock) {
+    log.debug(&quot;Before acquiring lock '{}'&quot;, lock);
+    //这里的globalLock为JUC的ReentrantLock对象，是一个全局锁
+    //之所以称为全局锁，是因为所有运行的command调用此方法时都会等待获得globalLock，然后再执行后续操作
+    //锁的粒度比较大，因此称为全局锁
+    globalLock.lock();
+    try {
+        //获得了锁的command才能够执行acquireLockInternal方法
+        return acquireLockInternal(lock);
+    } finally {
+        globalLock.unlock();
+    }
+}
+</code></pre>
+
+<p>这里使用了JUC的ReentrantLock来实现同步，保证多个commnad线程执行此方法时，只有一个线程在执行acquireLockInternal()方法。</p>
+<pre><code class="java">private Pair&lt;Boolean, Set&lt;String&gt;&gt; acquireLockInternal(EngineLock lock) {
+    boolean checkOnly = true;
+    //这里执行了两次循环，第一次checkOnly为true,第二次checkOnly为false
+    //即第一次只校验是否能够插入锁，第二次才去插入锁
+    //这样做的目的是为了避免如果校验和插入同时进行，如果后续校验失败需要对之前插入的锁进行删除
+    for (int i = 0; i &lt; 2; i++) {
+        if (lock.getSharedLocks() != null) {
+            for (Entry&lt;String, Pair&lt;String, String&gt;&gt; entry : lock.getSharedLocks().entrySet()) {
+                //将共享锁放入hashMap缓存,并返回是否获成功获得锁
+                Pair&lt;Boolean, Set&lt;String&gt;&gt; result =
+                    insertSharedLock(buildHashMapKey(entry), 
+                                     entry.getValue().getSecond(), checkOnly);
+                if (!result.getFirst()) {
+                    log.debug(&quot;Failed to acquire lock. Shared lock is taken for key '{}',&quot; + 
+                              &quot;value '{}'&quot;,
+                              entry.getKey(),
+                              entry.getValue().getFirst());
+                    return result;
+                }
+            }
+        }
+        if (lock.getExclusiveLocks() != null) {
+            for (Entry&lt;String, Pair&lt;String, String&gt;&gt; entry : lock.getExclusiveLocks().entrySet()) {
+                Pair&lt;Boolean, Set&lt;String&gt;&gt; result =
+                    //将独占锁放入hashMap缓存,并返回是否获成功获得锁
+                    insertExclusiveLock(buildHashMapKey(entry), 
+                                        entry.getValue().getSecond(), checkOnly);
+                if (!result.getFirst()) {
+                    log.debug(&quot;Failed to acquire lock. Exclusive lock is taken for key '{}',&quot; +
+                              &quot;value '{}'&quot;,
+                              entry.getKey(),
+                              entry.getValue().getFirst());
+                    return result;
+                }
+            }
+        }
+        checkOnly = false;
+    }
+    log.debug(&quot;Success acquiring lock '{}' succeeded &quot;, lock);
+    return LOCK_INSERT_SUCCESS_RESULT;
+}
+</code></pre>
+
+<p>上面的代码使用了两次循环来执行锁插入操作（第一次只检查能否插入，第二才真正进行插入），目的是当有多个锁需要检查的话，避免了后续检查失败时要对之前插入的锁进行删除。而insertSharedLock()和insertExclusiveLock()真正获得锁的方法，而锁获得的逻辑十分简单，使用MapEntry的key以及Pair的第一个值构成hashMap的的key，Pair的第二值作为value存入HashMap缓存。区别两者对于获得锁成功的判断不同：</p>
+<ul>
+<li>独占锁：如果对应的key在HashMap中不存在，将key和value存入HashMap，视为获得锁成功。如果对应的key在HashMap中存在，视为获得锁失败。</li>
+<li>共享锁：如果对应的key在HashMap中不存在，将key和value存入HashMap，视为获得锁成功。如果对应的key在HashMap中存在，判断锁对象是不是独占锁，如果是独占锁，视为获得锁失败，否则将共享锁的count数加一。</li>
+</ul>
+<p>到此，锁竞争的逻辑就结束了，当获得锁失败后，命令的校验也就失败了，命令也就执行失败了。</p>
+<h2 id="_2">锁的释放</h2>
+<p>锁的释放在AbstractCommand的<em>freeLock()</em>方法中实现，如下：</p>
+<pre><code class="java">public void freeLock() {
+    // 如果context锁不为空，进行释放锁的工作
+    if (context.getLock() != null) {
+        // 调用LockManager的releaseLock方法释放当前锁
+        getLockManager().releaseLock(context.getLock());
+        log.info(&quot;Lock freed to object '{}'&quot;, context.getLock());
+        context.withLock(null);
+        // 释放其他锁自定义的锁
+        freeCustomLocks();
+    }
+}
+</code></pre>
+
+<p>freeLock方法会在以下几种情况下被调用：</p>
+<ul>
+<li>command的校验工作失败，最终会释放校验过程中加的锁</li>
+<li>锁的范围为Execute，在command的Execute阶段结束后释放锁</li>
+<li>command的所有action结束，在endAction方法中释放锁</li>
+<li>在command中主动调用freeLock方法</li>
+</ul>
+<p>LockManager的releaseLock方法如下：</p>
+<pre><code class="java">public void releaseLock(EngineLock lock) {
+    log.debug(&quot;Before releasing a lock '{}'&quot;, lock);
+    //使用全局锁
+    globalLock.lock();
+    try {
+        if (lock.getSharedLocks() != null) {
+            for (Entry&lt;String, Pair&lt;String, String&gt;&gt; entry : lock.getSharedLocks().entrySet()) {
+                //释放共享锁
+                releaseSharedLock(buildHashMapKey(entry), entry.getValue().getSecond());
+            }
+        }
+        if (lock.getExclusiveLocks() != null) {
+            for (Entry&lt;String, Pair&lt;String, String&gt;&gt; entry : lock.getExclusiveLocks().entrySet()) {
+                //释放独占锁
+                releaseExclusiveLock(buildHashMapKey(entry));
+            }
+        }
+        //isAwait为true的锁，会在竞争锁失败时挂起
+        //这里唤醒等待独占锁的线程开始竞争获得锁
+        releasedLock.signalAll();
+    } finally {
+        globalLock.unlock();
+    }
+}
+</code></pre>
+
+<p>释放锁的过程也很简单，共享锁释放时将count减1，当count为0时从缓存中删除锁；而独占锁释放时直接将锁从缓存中删除即可。</p>
+<h2 id="_3">只改变数据库状态的操作锁</h2>
+<p>OvirtEngine中还存在另一种锁，只是改变Entity在数据库的状态，从而实现限制前台页面操作的功能。例如，前台锁定VM的机制，实际上是将数据库的status字段设置为<code>ImageLocked</code>状态，而前台会根据这个状态来限制页面的操作功能。VmHandler中lockVm方法如下：</p>
+<pre><code class="java">public static void lockVm(final VmDynamic vm, final CompensationContext compensationContext) {
+    TransactionSupport.executeInNewTransaction(() -&gt; {
+        // 在修改状态前，先存储vm的快照信息，用于操作失败时恢复数据
+        compensationContext.snapshotEntityStatus(vm);
+        // 调用lockVm方法修改vm状态，主要就是操作数据库修改status字段
+        lockVm(vm.getId());
+        compensationContext.stateChanged();
+    });
+}
+
+public static void lockVm(Guid vmId) {
+    Backend.getInstance()
+        .getResourceManager()
+        .runVdsCommand(VDSCommandType.SetVmStatus,
+                       new SetVmStatusVDSCommandParameters(vmId, VMStatus.ImageLocked));
+}
+</code></pre>
+
+<p>是否需要加锁，由代码的逻辑决定；而解锁工作一般在command执行成功或command失败时执行。</p>
+<p>前台如何实现锁定操作？</p>
+<p>在VmListModel的updateActionsAvailability()方法维护着前台按钮是否可以点击的逻辑，例如删除虚拟机按钮的可执行逻辑为：</p>
+<pre><code class="java">getRemoveCommand()
+    .setExecutable(vmsSelected &amp;&amp; VdcActionUtils.canExecutePartially(items,
+    VmWithStatusForExclusiveLock.class, VdcActionType.RemoveVm));
+</code></pre>
+
+<p>可以看出是否能点击的主要逻辑在于VdcActionUtils.canExecutePartially()方法</p>
+<pre><code class="java">public static boolean canExecutePartially(List&lt;? extends BusinessEntityWithStatus&lt;?, ?&gt;&gt; entities, Class type, VdcActionType action) {
+    if (blacklist.containsKey(type)) {
+        for (BusinessEntityWithStatus&lt;?, ?&gt; a : entities) {
+            if (a.getClass() == type &amp;&amp; (!blacklist.get(type).containsKey(a.getStatus()) 
+                                    || !blacklist.get(type).get(a.getStatus()).contains(action))) {
+                return true;
+            }
+        }
+    } else {
+        return true;
+    }
+    return false;
+}
+</code></pre>
+
+<p>可以看出前台维护着一张status与Action之间的黑名单列表，即某些状态下一些Action不能执行，<code>VMStatus.ImageLocked</code>的action黑名单如下：</p>
+<pre><code class="java">vmBlacklist.put(
+                VMStatus.ImageLocked,
+                EnumSet.of(
+                        VdcActionType.RunVm,
+                        VdcActionType.CloneVm,
+                        VdcActionType.RunVmOnce,
+                        VdcActionType.StopVm,
+                        VdcActionType.ShutdownVm,
+                        VdcActionType.HibernateVm,
+                        VdcActionType.MigrateVm,
+                        VdcActionType.RemoveVm,
+                        VdcActionType.AddVmTemplate,
+                        VdcActionType.ExportVm,
+                        VdcActionType.ImportVm,
+                        VdcActionType.ChangeDisk,
+                        VdcActionType.CreateAllSnapshotsFromVm,
+                        VdcActionType.AddVmInterface,
+                        VdcActionType.UpdateVmInterface,
+                        VdcActionType.RemoveVmInterface,
+                        VdcActionType.CancelMigrateVm,
+                        VdcActionType.ExtendImageSize,
+                        VdcActionType.RebootVm));
+</code></pre>
+                
+                  
+                
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../[OvirtEngine]RestApi整理/" title="[OvirtEngine]RestApi整理" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                [OvirtEngine]RestApi整理
+              </span>
+            </div>
+          </a>
+        
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/application.808e90bb.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"../../.."}})</script>
+      
+    
+  </body>
+</html>

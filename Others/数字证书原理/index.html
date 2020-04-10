@@ -36,7 +36,7 @@
     
     
       
-        <title>Maven构建生命周期 - Notes</title>
+        <title>数字证书原理 - Notes</title>
       
     
     
@@ -77,7 +77,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#_1" tabindex="1" class="md-skip">
+      <a href="#ssltls" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -103,7 +103,7 @@
             </span>
             <span class="md-header-nav__topic">
               
-                Maven构建生命周期
+                数字证书原理
               
             </span>
           
@@ -356,12 +356,10 @@
       
       
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
     
     <label class="md-nav__link" for="nav-5">
       Maven
@@ -379,11 +377,73 @@
 
 
   <li class="md-nav__item">
-    <a href="../Maven概述/" title="Maven概述" class="md-nav__link">
+    <a href="../../Maven/Maven概述/" title="Maven概述" class="md-nav__link">
       Maven概述
     </a>
   </li>
 
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Maven/Maven构建生命周期/" title="Maven构建生命周期" class="md-nav__link">
+      Maven构建生命周期
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Maven/MavenPOM简介/" title="MavenPOM简介" class="md-nav__link">
+      MavenPOM简介
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Maven/MavenProfile简介/" title="MavenProfile简介" class="md-nav__link">
+      MavenProfile简介
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6" checked>
+    
+    <label class="md-nav__link" for="nav-6">
+      Others
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        Others
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
         
           
           
@@ -398,11 +458,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="__toc">
-        Maven构建生命周期
+        数字证书原理
       </label>
     
-    <a href="./" title="Maven构建生命周期" class="md-nav__link md-nav__link--active">
-      Maven构建生命周期
+    <a href="./" title="数字证书原理" class="md-nav__link md-nav__link--active">
+      数字证书原理
     </a>
     
       
@@ -414,105 +474,51 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
-    概述
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#maven" class="md-nav__link">
-    Maven的构建生命周期
+  <a href="#ssltls" class="md-nav__link">
+    SSL/TLS协议
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#maven_1" class="md-nav__link">
-    Maven构建生命周期是由多个构建阶段组成的
+  <a href="#tls" class="md-nav__link">
+    TLS协议的工作机制
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tls-record-layer" class="md-nav__link">
+    TLS Record Layer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tls-handshake-protocol" class="md-nav__link">
+    TLS handshake protocol
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    证书的主要内容
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
-    构建阶段由多个插件目标组成
+    参考
   </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
-    生命周期参考
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#clean" class="md-nav__link">
-    Clean生命周期
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#default" class="md-nav__link">
-    Default生命周期
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#site" class="md-nav__link">
-    Site生命周期
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
-    通过配置项目来使用构建生命周期
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1packaging" class="md-nav__link">
-    1.Packaging
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2plugins" class="md-nav__link">
-    2.Plugins
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
-    例子
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -529,66 +535,6 @@
   
 </nav>
     
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../MavenPOM简介/" title="MavenPOM简介" class="md-nav__link">
-      MavenPOM简介
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../MavenProfile简介/" title="MavenProfile简介" class="md-nav__link">
-      MavenProfile简介
-    </a>
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item md-nav__item--nested">
-    
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
-    
-    <label class="md-nav__link" for="nav-6">
-      Others
-    </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-6">
-        Others
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../Others/数字证书原理/" title="数字证书原理" class="md-nav__link">
-      数字证书原理
-    </a>
   </li>
 
         
@@ -880,105 +826,51 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
-    概述
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#maven" class="md-nav__link">
-    Maven的构建生命周期
+  <a href="#ssltls" class="md-nav__link">
+    SSL/TLS协议
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#maven_1" class="md-nav__link">
-    Maven构建生命周期是由多个构建阶段组成的
+  <a href="#tls" class="md-nav__link">
+    TLS协议的工作机制
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tls-record-layer" class="md-nav__link">
+    TLS Record Layer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tls-handshake-protocol" class="md-nav__link">
+    TLS handshake protocol
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    证书的主要内容
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
-    构建阶段由多个插件目标组成
+    参考
   </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
-    生命周期参考
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#clean" class="md-nav__link">
-    Clean生命周期
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#default" class="md-nav__link">
-    Default生命周期
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#site" class="md-nav__link">
-    Site生命周期
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
-    通过配置项目来使用构建生命周期
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1packaging" class="md-nav__link">
-    1.Packaging
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2plugins" class="md-nav__link">
-    2.Plugins
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
-    例子
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -1003,293 +895,83 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/ginkoc/docs/edit/master/docs/Maven/Maven构建生命周期.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/ginkoc/docs/edit/master/docs/Others/数字证书原理.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                  <h1>Maven构建生命周期</h1>
+                  <h1>数字证书原理</h1>
                 
-                <h2 id="_1">概述</h2>
-<p>本文主要是对<code>Maven</code>的构建生命周期进行简单的介绍。</p>
-<p>本文的主要是笔者对<code>Maven</code>官方手册的翻译和理解：<a href="http://maven.apache.org/guides/introduction/introduction-to-the-pom.html">http://maven.apache.org/guides/introduction/introduction-to-the-pom.html</a></p>
-<p>参考了W3Cschool的<code>Maven</code>教程：<a href="https://www.w3cschool.cn/maven/tkhr1ht6.html">https://www.w3cschool.cn/maven/tkhr1ht6.html</a></p>
-<h2 id="maven">Maven的构建生命周期</h2>
-<p>Maven的构建生命周期一共有三个：分别是<code>default(build)</code>、<code>site</code>和<code>clean</code>。</p>
-<table>
-<thead>
-<tr>
-<th align="center">生命周期</th>
-<th align="center">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="center">default(build)</td>
-<td align="center">用于处理项目部署</td>
-</tr>
-<tr>
-<td align="center">site</td>
-<td align="center">用于创建项目站点文档</td>
-</tr>
-<tr>
-<td align="center">clean</td>
-<td align="center">用于清理其他生命周期生成的文件</td>
-</tr>
-</tbody>
-</table>
-<h3 id="maven_1">Maven构建生命周期是由多个构建阶段组成的</h3>
-<p>以default构建生命周期为例，它由以下几个构建阶段组成</p>
-<ul>
-<li><code>validate</code> - 检查工程配置是否正确，完成构建过程的所有必要信息是否能够获取到</li>
-<li><code>compile</code> - 编译工程源码</li>
-<li><code>test</code> - 使用适当的单元测试框架（例如JUnit）运行测试</li>
-<li><code>package</code> - 获取编译后的代码，并按照可发布的格式进行打包，例如 <code>JAR</code>、<code>WAR</code> 或者 <code>EAR</code> 文件</li>
-<li><code>verify</code> - 运行检查操作来验证工程包是有效的，并满足质量要求</li>
-<li><code>install</code> - 安装工程包到本地仓库中，该仓库可以作为本地其他工程的依赖</li>
-<li><code>deploy</code> - 拷贝最终的工程包到远程仓库中，以共享给其他开发人员和工程</li>
-</ul>
-<p>这些生命周期阶段（以及此处未显示的其他生命周期阶段）将按顺序执行，以完成默认生命周期。 鉴于上面的生命周期阶段，这意味着当使用默认生命周期时，<code>Maven</code>将首先验证项目，然后将尝试编译源代码，针对测试运行，打包二进制文件（例如<code>jar</code>），对其运行集成测试包，验证集成测试，将经过验证的软件包安装到本地存储库，然后将已安装的软件包部署到远程存储库。</p>
-<h3 id="_2">构建阶段由多个插件目标组成</h3>
-<p>插件目标（goal）表示特定任务（比构建阶段更精细），这有助于构建和管理项目。 它可能绑定到零个或多个构建阶段。没有绑定任何构建阶段的目标可以在构建生命周期之外被直接调用执行。执行顺序取决于调用目标和构建阶段的顺序。例如，下面的命令中<code>clean</code>和<code>package</code>参数是构建阶段，而<code>dependency:copy-dependencies</code>是（插件的）目标。</p>
-<pre><code class="shell">mvn clean dependency:copy-dependencies package
+                <h2 id="ssltls">SSL/TLS协议</h2>
+<p>TLS（Transport Layer Security，传输层安全协议），及其前身SSL（Secure Sockets Layer，安全套接层）是一种安全协议，目的是为互联网通信提供安全及数据完整性保障。</p>
+<p>TLS协议的优势是与高层的应用层协议（如HTTP、FTP、Telnet等）无耦合。应用层协议能透明地运行在TLS协议之上，由TLS协议进行创建加密通道需要的协商和认证。应用层协议传送的数据在通过TLS协议时都会被加密，从而保证通信的私密性。</p>
+<p>TLS协议是可选的，必须配置客户端和服务器才能使用。主要有两种方式实现这一目标：一个是使用统一的TLS协议通信端口（例如：用于HTTPS的端口443）；另一个是客户端请求服务器连接到TLS时使用特定的协议机制（例如：邮件、新闻协议和STARTTLS）。一旦客户端和服务器都同意使用TLS协议，他们通过使用一个握手过程协商出一个有状态的连接以传输数据。</p>
+<p>TLS协议使用以下三种机制为信息通信提供安全传输：</p>
+<p>1、隐秘性，所有通信都通过加密后进行传播</p>
+<p>2、身份认证，通过证书进行认证</p>
+<p>3、可靠性，通过校验数据完整性维护一个可靠的安全连接</p>
+<h3 id="tls">TLS协议的工作机制</h3>
+<p>TLS协议由TLS Record Layer（TLS 记录协议）和TLS handshake protocol（TLS握手协议）两个部分组成。</p>
+<h4 id="tls-record-layer">TLS Record Layer</h4>
+<p>为每条信息提供一个header和在尾部生成一个从Message Authentication Code (MAC) 得到的hash值，其中header由5 bytes组成，分别是协议说明(1bytes),协议版本(2bytes)和长度(2bytes)，跟在header后面的协议信息长度不得超过16384bytes。</p>
+<h4 id="tls-handshake-protocol">TLS handshake protocol</h4>
+<p>通过握手协议，客户端和服务器协商各种参数用于创建安全连接，主要步骤如下：</p>
+<p><img alt="img" src="../../images/tls-handshake.png" /></p>
+<p>TLS协议握手协议首先，还是要经过TCP三次握手建立连接，然后才是TLS握手的开始：</p>
+<p>首先还是要经过TCP三次握手建立连接，然后才是TLS握手的开始：</p>
+<p>ClientHello：Client端将自己的TLS协议版本，加密套件，压缩方法，随机数，SessionID(未填充)发送给Server端</p>
+<p>ServerHello：Server端将选择后的SSL协议版本，压缩算法，密码套件，填充SessionID，生成的随机数等信息发送给Client端</p>
+<p>ServerCertificates：Server端将自己的数字证书(包含公钥)，发送给Client端。(证书需要从数字证书认证机构(CA)申请，证书是对于服务端的一种认证)，若要进行更为安全的数据通信，Server端还可以向Client端发送Cerficate Request来要去客户端发送对方的证书进行合法性的认证。</p>
+<p>ServerHelloDone：当完成ServerHello后，Server端会发送Server Hello Done的消息给客户端，表示ServerHello 结束了。</p>
+<p>ClientKeyExchage：当Client端收到Server端的证书等信息后，会先对服务端的证书进行检查，检查证书的完整性以及证书跟服务端域名是否吻合，然后使用加密算法生成一个PreMaster Secret，并通过Server端的公钥进行加密，然后发送给Server端。</p>
+<p>ClientFinishd：Client端会发送一个ChangeCipherSpec(一种协议，数据只有一字节)，用于告知Server端已经切换到之前协商好的加密套件的状态，准备使用之前协商好的加密套件加密数据并进行传输了。然后使用Master Secret(通过两个随机数、PreMaster Secret和加密算法计算得出)加密一段Finish的数据传送给服务端，此数据是为了在正式传输应用数据之前对刚刚握手建立起来的加解密通道进行验证。</p>
+<p>Server Finishd：Sever端在接收到Client端传过来的加密数据后，使用私钥对这段加密数据进行解密，并对数据进行验证，然后会给客户端发送一个ChangeCipherSpec，告知客户端已经切换到协商过的加密套件状态，准备使用加密套件加密数据并传输了。之后，服务端也会使用Master Secret加密一段Finish消息发送给客户端，以验证之前通过握手建立起来的加解密通道是否成功。</p>
+<p>根据之前的握手信息，如果客户端和服务端都能对Finish信息进行正常加解密且消息正确的被验证，则说明握手通道已经建立成功。</p>
+<p>接下来，双方所有的通信数据都通过Master Secret进行加密后传输。　　　　</p>
+<h4 id="_1">证书的主要内容</h4>
+<p>◆Issuer (证书的发布机构)</p>
+<p>指出是什么机构颁发的这个证书，也就是指明这个证书是哪个公司创建的(只是创建证书，不是指证书的使用者)。</p>
+<p>◆Start date , Expire date (证书的有效期)</p>
+<p>也就是证书的有效时间，或者说证书的使用期限。 过了有效期限，证书就会作废，不能使用了。</p>
+<p>◆Public key (公钥)</p>
+<p>用来加解密信息。</p>
+<p>◆Subject (主题)</p>
+<p>这个证书是发布给谁的，或者说证书的所有者，一般是某个人或者某个公司名称、机构的名称、公司网站的网址等。</p>
+<p>◆Signature algorithm (签名所使用的算法)</p>
+<p>就是指的这个数字证书的数字签名所使用的加密算法，这样就可以使用证书发布机构的证书里面的公钥，根据这个算法对指纹进行解密。指纹的加密结果就是数字签名。</p>
+<p>◆Thumbprint, Thumbprint algorithm (指纹以及指纹算法)</p>
+<p>这个是用来保证证书的完整性的，也就是说确保证书没有被修改过。 其原理就是在发布证书时，发布者根据指纹算法(一个hash算法)计算<em>证书内容</em>的hash值(指纹)并和证书放在一起，使用者在打开证书时，自己也根据指纹算法计算一下证书的hash值(指纹)，如果和刚开始的值对得上，就说明证书没有被修改过，因为证书的内容被修改后，根据证书的内容计算的出的hash值(指纹)是会变化的。 注意，这个指纹会使用这个证书机构的私钥用签名算法(Signature algorithm)加密后和证书放在一起。</p>
+<p>证书的内容大致如下：</p>
+<pre><code class="shell">-----BEGIN CERTIFICATE-----
+subject: CN=localhost.localdomain,O=localdomain,C=CN
+start date: Jul 24 15:46:10 2019 GMT
+expire date: Jun 28 15:46:10 2024 GMT
+common name: localhost.localdomain
+issuer: CN=localhost.localdomain.87263,O=localdomain,C=CN
+public key: xxxxxxxxxxxxxx（很长一串）#CA会把public key对应的private key交给Server
+#{}中的内容是使用CA机构的私钥进行加密得到，需要使用对应的公钥进行解密
+{
+    证书指纹:对证书的所有内容（content）使用hash算法计算得到
+    指纹算法:指出计算指纹的hash算法
+}
+-----END CERTIFICATE-----
 </code></pre>
 
-<p>这里的 <code>clean</code> 阶段将会被首先执行，然后 <code>dependency:copy-dependencies</code>目标会被执行，最终<code>package</code>阶段被执行。</p>
-<h3 id="_3">生命周期参考</h3>
-<p>有一些与 Maven 生命周期相关的重要概念需要说明：当一个阶段通过 <code>Maven</code> 命令调用时，例如 <em>mvn package</em>，<em>该阶段之前以及包括该阶段在内的所有阶段会被执行</em>。不同的 maven 目标将根据<code>package</code>的类型（<code>JAR / WAR / EAR/ POM</code>），被绑定到不同的 Maven 生命周期阶段。</p>
-<h4 id="clean">Clean生命周期</h4>
-<table>
-<thead>
-<tr>
-<th align="center">生命周期阶段</th>
-<th align="center">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="center">pre-clean</td>
-<td align="center">在实际项目清理之前执行所需的过程</td>
-</tr>
-<tr>
-<td align="center">clean</td>
-<td align="center">删除之前构建过程中生成的所有文件</td>
-</tr>
-<tr>
-<td align="center">post-clean</td>
-<td align="center">执行完成项目清理所需的过程</td>
-</tr>
-</tbody>
-</table>
-<h4 id="default">Default生命周期</h4>
-<table>
-<thead>
-<tr>
-<th align="center">生命周期阶段</th>
-<th align="center">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="center">validate</td>
-<td align="center">检查工程配置是否正确，完成构建过程的所有必要信息是否能够获取到。</td>
-</tr>
-<tr>
-<td align="center">initialize</td>
-<td align="center">初始化构建状态，例如设置属性。</td>
-</tr>
-<tr>
-<td align="center">generate-sources</td>
-<td align="center">生成编译阶段需要包含的任何源码文件。</td>
-</tr>
-<tr>
-<td align="center">process-sources</td>
-<td align="center">处理源代码，例如，过滤任何值（filter any value）。</td>
-</tr>
-<tr>
-<td align="center">generate-resources</td>
-<td align="center">生成工程包中需要包含的资源文件。</td>
-</tr>
-<tr>
-<td align="center">process-resources</td>
-<td align="center">拷贝和处理资源文件到目的目录中，为打包阶段做准备。</td>
-</tr>
-<tr>
-<td align="center">compile</td>
-<td align="center">编译工程源码。</td>
-</tr>
-<tr>
-<td align="center">process-classes</td>
-<td align="center">处理编译生成的文件，例如 Java Class 字节码的加强和优化。</td>
-</tr>
-<tr>
-<td align="center">generate-test-sources</td>
-<td align="center">生成编译阶段需要包含的任何测试源代码。</td>
-</tr>
-<tr>
-<td align="center">process-test-sources</td>
-<td align="center">处理测试源代码，例如，过滤任何值（filter any values)。</td>
-</tr>
-<tr>
-<td align="center">test-compile</td>
-<td align="center">编译测试源代码到测试目的目录。</td>
-</tr>
-<tr>
-<td align="center">process-test-classes</td>
-<td align="center">处理测试代码文件编译后生成的文件。</td>
-</tr>
-<tr>
-<td align="center">test</td>
-<td align="center">使用适当的单元测试框架（例如JUnit）运行测试。</td>
-</tr>
-<tr>
-<td align="center">prepare-package</td>
-<td align="center">在真正打包之前，为准备打包执行任何必要的操作。</td>
-</tr>
-<tr>
-<td align="center">package</td>
-<td align="center">获取编译后的代码，并按照可发布的格式进行打包，例如 JAR、WAR 或者 EAR 文件。</td>
-</tr>
-<tr>
-<td align="center">pre-integration-test</td>
-<td align="center">在集成测试执行之前，执行所需的操作。例如，设置所需的环境变量。</td>
-</tr>
-<tr>
-<td align="center">integration-test</td>
-<td align="center">处理和部署必须的工程包到集成测试能够运行的环境中。</td>
-</tr>
-<tr>
-<td align="center">post-integration-test</td>
-<td align="center">在集成测试被执行后执行必要的操作。例如，清理环境。</td>
-</tr>
-<tr>
-<td align="center">verify</td>
-<td align="center">运行检查操作来验证工程包是有效的，并满足质量要求。</td>
-</tr>
-<tr>
-<td align="center">install</td>
-<td align="center">安装工程包到本地仓库中，该仓库可以作为本地其他工程的依赖。</td>
-</tr>
-<tr>
-<td align="center">deploy</td>
-<td align="center">拷贝最终的工程包到远程仓库中，以共享给其他开发人员和工程。</td>
-</tr>
-</tbody>
-</table>
-<h4 id="site">Site生命周期</h4>
-<table>
-<thead>
-<tr>
-<th align="center">生命周期阶段</th>
-<th align="center">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="center">pre-site</td>
-<td align="center">在实际项目站点生成之前执行所需的过程</td>
-</tr>
-<tr>
-<td align="center">site</td>
-<td align="center">生成项目的站点文档</td>
-</tr>
-<tr>
-<td align="center">post-site</td>
-<td align="center">执行完成站点生成所需的流程，并准备站点部署</td>
-</tr>
-<tr>
-<td align="center">site-deploy</td>
-<td align="center">将生成的站点文档部署到指定的Web服务器</td>
-</tr>
-</tbody>
-</table>
-<h3 id="_4">通过配置项目来使用构建生命周期</h3>
-<h4 id="1packaging">1.Packaging</h4>
-<p>最常见的方法是通过指定<code>pom</code>元素<code>&lt;packaging&gt;</code>的类型来绑定各构建阶段及其对应的插件目标。可用的打包类型主要有<code>jar</code>, <code>war</code>, <code>ear</code> 和<code>pom</code>，如果未在<code>pom.xml</code>文件中指定打包类型，则会被设置为默认值<code>jar</code>。</p>
-<p>每种打包类型包含一系列被绑定到特定构建阶段的插件目标。例如，<code>jar</code>类型将绑定如下目标以构建默认生命周期的阶段。</p>
-<table>
-<thead>
-<tr>
-<th align="center">Phase</th>
-<th align="center">plugin:goal</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="center"><code>process-resources</code></td>
-<td align="center"><code>resources:resources</code></td>
-</tr>
-<tr>
-<td align="center"><code>compile</code></td>
-<td align="center"><code>compiler:compile</code></td>
-</tr>
-<tr>
-<td align="center"><code>process-test-resources</code></td>
-<td align="center"><code>resources:testResources</code></td>
-</tr>
-<tr>
-<td align="center"><code>test-compile</code></td>
-<td align="center"><code>compiler:testCompile</code></td>
-</tr>
-<tr>
-<td align="center"><code>test</code></td>
-<td align="center"><code>surefire:test</code></td>
-</tr>
-<tr>
-<td align="center"><code>package</code></td>
-<td align="center"><code>jar:jar</code></td>
-</tr>
-<tr>
-<td align="center"><code>install</code></td>
-<td align="center"><code>install:install</code></td>
-</tr>
-<tr>
-<td align="center"><code>deploy</code></td>
-<td align="center"><code>deploy:deploy</code></td>
-</tr>
-</tbody>
-</table>
-<p>大部分打包类型的绑定集相差不大，但是有一些打包类型却比较特殊。例如，当打包类型为<code>pom</code>的项目仅将目标绑定到install和deploy阶段（有关某些打包类型的目标到构建阶段绑定的完整列表，请参阅<a href="http://maven.apache.org/ref/current/maven-core/default-bindings.html">standard set of bindings</a>）。</p>
-<h4 id="2plugins">2.Plugins</h4>
-<p>另一种添加目标到指定阶段的方式是在项目中配置插件。插件具有一个或多个目标，其中每个目标表示该插件的能力。 例如，<code>Compiler</code>插件有两个目标：<code>compile</code>和<code>testCompile</code>。前者编译主代码的源代码，后者编译测试代码的源代码。</p>
-<p>插件可以包含将目标绑定到哪个生命周期阶段的信息，需要注意的是仅仅指定插件本身是不够的，必须还要指明在构建过程中要运行的插件目标。</p>
-<p>目标的配置会应用到已经被绑定到指定打包类型的目标上。如果有多个目标绑定一个特定构建阶段，则目标的运行顺序是先执行绑定到打包类型上的目标，然后再执行<code>pom</code>文件中配置的目标。这些配置可以使用<code>&lt;executions&gt;</code>元素来进行详细的控制。</p>
-<h5 id="_5">例子</h5>
-<p>例如，<code>Modello</code>插件的目标<code>modello:java</code>被默认绑定到了<code>generate-sources</code>阶段（注：<code>maven</code>中的插件目标一般会有默认绑定的阶段，所以如果没有指定绑定阶段则目标会在默认阶段执行，<a href="http://maven.apache.org/developers/mojo-api-specification.html">详细内容可见maven手册</a>。因此，要使用<code>Modello</code>插件并在构建过程中执行<code>java</code>目标，可以通过在<code>pom</code>文件中的<code>&lt;build&gt;</code>的元素的子元素<code>&lt;plugins&gt;</code>中添加以下内容：</p>
-<pre><code class="xml"> &lt;plugin&gt;
-   &lt;groupId&gt;org.codehaus.modello&lt;/groupId&gt;
-   &lt;artifactId&gt;modello-maven-plugin&lt;/artifactId&gt;
-   &lt;version&gt;1.8.1&lt;/version&gt;
-   &lt;executions&gt;
-     &lt;execution&gt;
-       &lt;configuration&gt;
-         &lt;models&gt;
-           &lt;model&gt;src/main/mdo/maven.mdo&lt;/model&gt;
-         &lt;/models&gt;
-         &lt;version&gt;4.0.0&lt;/version&gt;
-       &lt;/configuration&gt;
-       &lt;goals&gt;
-         &lt;goal&gt;java&lt;/goal&gt;
-       &lt;/goals&gt;
-     &lt;/execution&gt;
-   &lt;/executions&gt;
- &lt;/plugin&gt;
-</code></pre>
-
-<p>请注意，在<code>&lt;executions&gt;</code>元素中<code>&lt;goal&gt;</code>元素是一定要指定的。当有多个<code>&lt;execution&gt;</code>指定到特定的阶段时，它们将按照<code>pom</code>文件中指定的顺序执行，并且先执行子类的<code>&lt;execution&gt;</code>。</p>
-<p>对于上面的例子，<code>modello:java</code>只会在它的默认阶段<code>generate-sources</code>执行，但你可能会有自己指定阶段的需求。例如，假设目标<code>display:time</code>可以输出当前时间到命令行，并且你希望它在<code>process-test-resources</code>阶段运行以显示测试开始的时间。你可以进行如下配置：</p>
-<pre><code class="xml"> &lt;plugin&gt;
-   &lt;groupId&gt;com.mycompany.example&lt;/groupId&gt;
-   &lt;artifactId&gt;display-maven-plugin&lt;/artifactId&gt;
-   &lt;version&gt;1.0&lt;/version&gt;
-   &lt;executions&gt;
-     &lt;execution&gt;
-       &lt;phase&gt;process-test-resources&lt;/phase&gt;
-       &lt;goals&gt;
-         &lt;goal&gt;time&lt;/goal&gt;
-       &lt;/goals&gt;
-     &lt;/execution&gt;
-   &lt;/executions&gt;
- &lt;/plugin&gt;
-</code></pre>
+<p>从上面的证书可以看出，要验证服务器证书的合法性就必须拥有CA机构的公钥，那么CA机构的一定存在自己的证书，所以在验证服务器证书的合法性时需要使用SSL请求的客户端拥有CA机构证书。</p>
+<p><strong>对等证书校验</strong>（client确认server的合法性）</p>
+<p>HTTPS协议使用的对等证书校验的方式，即Client通过信任的证书颁发机构（CA）颁发的证书来确认服务端发送过来证书的有效性。</p>
+<p>在curl命令行工具中可以使用--cacert参数来指定证书文件的位置。</p>
+<p>校验服务器证书的具体过程：</p>
+<p>（1）客户端读取证书中的Issuer(发布机构)，然后在客户端受信任的证书颁发机构（CA）的证书中寻找对应证书颁发机构的证书，用于校验证书是否为信任的颁发机构颁发的。</p>
+<p>（2）如果找不到该证书颁发机构的证书，客户端就会报错，说明服务器发来的证书是不可信任的。</p>
+<p>（3）如果找到颁发机构的证书，那么客户端就会从对应的证书中获得的公钥，然后使用公钥解密被加密的证书指纹以及指纹算法</p>
+<p>（4）客户端使用<em>解密获得的指纹加密算法</em>计算出服务器发来的证书的指纹，将计算结果与<em>解密获得的证书指纹</em>对比，如果一致，说明服务器发来的证书肯定没有被修改过，并且证书是受信任的证书颁发机构发布的</p>
+<p>（5）此时客户端就可以读取证书中的公钥，用于后续加密了</p>
+<p><strong>非对等证书校验</strong>（不验证server的合法性）</p>
+<p>跳过校验服务器证书合法性的步骤，并直接使用服务器发送的证书中的公钥加密相应的内容。在curl命令行工具中可以使用-k/--insecure参数来跳过证书校验。</p>
+<h3 id="_2">参考</h3>
+<p>​   <a href="https://www.cnblogs.com/JeffreySun/archive/2010/06/24/1627247.html">https://www.cnblogs.com/JeffreySun/archive/2010/06/24/1627247.html</a></p>
+<p>​   <a href="https://www.cnblogs.com/codecc/p/5192023.html">https://www.cnblogs.com/codecc/p/5192023.html</a></p>
+<p>​   <a href="https://blog.csdn.net/chengqiuming/article/details/83115642">https://blog.csdn.net/chengqiuming/article/details/83115642</a></p>
+<p>​   <a href="[https://xz.aliyun.com/t/2531#toc-0">https://xz.aliyun.com/t/2531#toc-0</a></p>
                 
                   
                 
@@ -1311,7 +993,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../Maven概述/" title="Maven概述" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../../Maven/MavenProfile简介/" title="MavenProfile简介" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1320,19 +1002,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Maven概述
+                MavenProfile简介
               </span>
             </div>
           </a>
         
         
-          <a href="../MavenPOM简介/" title="MavenPOM简介" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../../Spring/SpringSecurity/SpringSecurtiy源码分析/" title="SpringSecurity笔记" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                MavenPOM简介
+                SpringSecurity笔记
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
