@@ -2,10 +2,6 @@
 
 本文主要是对`Maven`的构建配置文件进行简单的介绍。
 
-**索引**
-
-[TOC]
-
 本文的主要是笔者对`Maven`官方手册的翻译和理解：[http://maven.apache.org/guides/introduction/introduction-to-profiles.html](http://maven.apache.org/guides/introduction/introduction-to-profiles.html)
 
 参考了W3Cschool的`Maven`教程：[https://www.w3cschool.cn/maven/tchv1ht8.html](https://www.w3cschool.cn/maven/tchv1ht8.html)

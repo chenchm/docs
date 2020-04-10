@@ -2,10 +2,34 @@ site_name: Notes
 repo_url: https://github.com/ginkoc/docs
 nav:
     - Home: index.md
-    - 'Maven':
-        - POM简介: Maven/Maven POM.md
-        - Profile简介: Maven/Maven Profile.md
-        - Maven概述: Maven/Maven概述.md
-        - Maven构建生命周期: Maven/Maven构建生命周期.md
+    - AOP:
+        - AOP\Aspectj切面织入.md
+    - Docker:
+        - Docker\Docker镜像层.md
+    - Java:
+        - 集合:
+            - Java\集合\ArrayList源码分析.md
+    - Maven:
+        - Maven\Maven概述.md
+        - Maven\Maven构建生命周期.md
+        - Maven\MavenPOM简介.md
+        - Maven\MavenProfile简介.md
+    - Others:
+        - Others\数字证书原理.md
+    - Spring:
+        - SpringSecurity:
+            - Spring\SpringSecurity\SpringSecurtiy源码分析.md
+        - Spring_DBs:
+            - Spring\Spring_DBs\SpringDataJpa笔记.md
+            - Spring\Spring_DBs\Spring整合Redis.md
+        - Spring基础知识:
+            - Spring\Spring基础知识\DispatcherServlet源码分析.md
+    - Web:
+        - Web\Servlet概述.md
+    - Work-related:
+        - Ovirt:
+            - Work-related\Ovirt\[OvirtEngine]Dao层测试.md
+            - Work-related\Ovirt\[OvirtEngine]RestApi整理.md
+            - Work-related\Ovirt\[OvirtEngine]锁机制.md
 theme: 
     name: 'material'
