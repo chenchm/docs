@@ -2,6 +2,8 @@ site_name: Notes
 repo_url: https://github.com/ginkoc/docs
 nav:
     - Home: index.md
+    - Algorithm:
+        - Algorithm\背包问题.md
     - AOP:
         - AOP\Aspectj切面织入.md
     - Docker:
@@ -9,6 +11,8 @@ nav:
     - Java:
         - 集合:
             - Java\集合\ArrayList源码分析.md
+        - 基础知识:
+            - Java\基础知识\try-catch-finally块中的return语句.md
     - Maven:
         - Maven\Maven概述.md
         - Maven\Maven构建生命周期.md
