@@ -282,6 +282,8 @@ public class EchoServer {
             b.group(boss, workers)
                 // 设置要启动的Channel类型
                 .channel(NioServerSocketChannel.class)
+                // 配置NioServerSocketChannel的参数
+                .option(ChannelOption.SO_BACKLOG, 128)
                 // 配置子Channel的Handler链
                 .childHandler(new EchoServerInitializer());
             
@@ -386,7 +388,11 @@ final ChannelFuture initAndRegister() {
 
 我们可以将`initAndRegister`方法的逻辑拆分成三个部分：
 
-**使用ChannelFactory创建Channel**
+- 通过channelFactory.newChannel()，创建Channel(实际上是NioServerSocketChannel)
+- 初始化创建的管道
+- 通过config().group().register(channel)，将管道注册到NioEventLoop的Selector上
+
+#### 使用ChannelFactory创建Channel
 
 ChannelFactory是怎么来的呢，让我们回到调用EchoServe类调用bind方法启动之前的配置逻辑上来：
 
@@ -448,12 +454,13 @@ newChannel方法通过反射调用创建了Channel对象，从上面的分析可
 
 ```java
 public NioServerSocketChannel() {
-    // 
+    // 创建ServerSocketChannel作为构造函数参数
     this(newSocket(DEFAULT_SELECTOR_PROVIDER));
 }
 
 private static ServerSocketChannel newSocket(SelectorProvider provider) {
     try {
+        // 通过Java NIO的SelectorProvider来构建Java Channel
         return provider.openServerSocketChannel();
     } catch (IOException e) {
         throw new ChannelException(
@@ -462,19 +469,25 @@ private static ServerSocketChannel newSocket(SelectorProvider provider) {
 }
 
 public NioServerSocketChannel(ServerSocketChannel channel) {
+    // 设置readInterestOp的值为SelectionKey.OP_ACCEPT，即监听连接请求
     super(null, channel, SelectionKey.OP_ACCEPT);
+    // 初始化NettyNio配置对象，用于快速获得channel参数信息
     config = new NioServerSocketChannelConfig(this, javaChannel().socket());
 }
 
+// 中间对象AbstractNioMessageChannel
 protected AbstractNioMessageChannel(Channel parent, SelectableChannel ch, int readInterestOp) {
     super(parent, ch, readInterestOp);
 }
 
 protected AbstractNioChannel(Channel parent, SelectableChannel ch, int readInterestOp) {
     super(parent);
+    // 设置Netty NioChannel持有的Java Channel引用
     this.ch = ch;
+    // 设置Channel监听的操作类型
     this.readInterestOp = readInterestOp;
     try {
+        // 设置Java Channel为非阻塞的
         ch.configureBlocking(false);
     } catch (IOException e) {
         try {
@@ -489,9 +502,202 @@ protected AbstractNioChannel(Channel parent, SelectableChannel ch, int readInter
         throw new ChannelException("Failed to enter non-blocking mode.", e);
     }
 }
+
+protected AbstractChannel(Channel parent) {
+    this.parent = parent;
+    // 生成Channel的全局Id
+    id = newId();
+    // 初始化Unsafe对象
+    unsafe = newUnsafe();
+    // 初始化ChannelPipeline
+    pipeline = newChannelPipeline();
+}
 ```
 
+从NioServerSocketChannel构造函数的调用链可以看出，在创建Netty NioChannel时会初始对应的Java Channel并且将Java Channel配置为非阻塞的。之后进入AbstractChannel的逻辑，初始化Netty NioChannel的相关属性：
 
+- 调用newId()，生成一个Channel的全局Id
+- 调用newUnsafe()，生成Unsafe对象，Unsafe能够处理Java NIO相关的逻辑，例如在NioEventLoop的Selector上注册Java Channel，或者Java Channel绑定到对应的端口。
+- 调用newChannelPipeline()，生成DefaultChannelPipeline对象，这个对象在[Netty组件]()中介绍过，是用来维护Netty Handler处理链的。
+
+[Netty组件]()中对DefaultChannelPipeline对象的分析可以知道，在DefaultChannelPipeline初始化完成时，pipeline中只有头节点（head）和尾节点（tail）两个节点，其中头结点同时实现了`ChannelOutboundHandler`和`ChannelInboundHandler`这表示头结点即可以处理入站信息也可以处理出站信息；而尾节点只实现了`ChannelInboundHandler`所以只能处理入站信息，如下：
+
+```java
+// 头结点实现的接口
+final class HeadContext extends AbstractChannelHandlerContext
+            implements ChannelOutboundHandler, ChannelInboundHandler {
+
+    private final Unsafe unsafe;
+
+    HeadContext(DefaultChannelPipeline pipeline) {
+        super(pipeline, null, HEAD_NAME, true, true);
+        unsafe = pipeline.channel().unsafe();
+        setAddComplete();
+    }
+    ...
+}
+
+// 尾节点实现的接口
+final class TailContext extends AbstractChannelHandlerContext implements ChannelInboundHandler {
+    TailContext(DefaultChannelPipeline pipeline) {
+        super(pipeline, null, TAIL_NAME, true, false);
+        setAddComplete();
+    }
+}
+```
+
+此时pipeline的链表结构如下：
+
+![netty_ctx](..\images\netty_ctx.png)
+
+至此，整个NioServerSocketChannel的创建工作就完成了，接下将进行NioServerSocketChannel初始化工作。
+
+#### 初始化NioServerSocketChannel
+
+完成管道的创建工作后，继续从ServerBootstrap的`initAndRegister`方法往下走，接下来将调用`init`方法来进行管道的初始化工作，`init`方法如下：
+
+```java
+void init(Channel channel) throws Exception {
+    // 获得通过Bootstrap对象的option方法配置的参数
+    final Map<ChannelOption<?>, Object> options = options0();
+    synchronized (options) {
+        // 将配置应用到相应的对象上，如java channel或java socket
+        setChannelOptions(channel, options, logger);
+    }
+
+    // 获得通过Bootstrap对象的attr方法配置的属性
+    final Map<AttributeKey<?>, Object> attrs = attrs0();
+    synchronized (attrs) {
+        // 使用for循环修改属性对应的值
+        for (Entry<AttributeKey<?>, Object> e: attrs.entrySet()) {
+            @SuppressWarnings("unchecked")
+            AttributeKey<Object> key = (AttributeKey<Object>) e.getKey();
+            channel.attr(key).set(e.getValue());
+        }
+    }
+
+    // 获得NioServerSocketChannel的pipline对象
+    ChannelPipeline p = channel.pipeline();
+
+    // 获得子Channel参数信息，用于创建ServerBootstrapAcceptor
+    // ServerBootstrapAcceptor是一个处理连接请求的Handler，会为连接请求创建对应的Channel
+    final EventLoopGroup currentChildGroup = childGroup;
+    final ChannelHandler currentChildHandler = childHandler;
+    final Entry<ChannelOption<?>, Object>[] currentChildOptions;
+    final Entry<AttributeKey<?>, Object>[] currentChildAttrs;
+    synchronized (childOptions) {
+        currentChildOptions = childOptions.entrySet().toArray(newOptionArray(0));
+    }
+    synchronized (childAttrs) {
+        currentChildAttrs = childAttrs.entrySet().toArray(newAttrArray(0));
+    }
+
+    // 在pipline中添加一个ChannelInitializer
+    // 当ChannelInitializer的initChannel被调用时，可以对管道进行操作
+    p.addLast(new ChannelInitializer<Channel>() {
+        @Override
+        public void initChannel(final Channel ch) throws Exception {
+            final ChannelPipeline pipeline = ch.pipeline();
+            // 在pipline中添加通过Bootstrap对象的handler配置的Handler
+            ChannelHandler handler = config.handler();
+            if (handler != null) {
+                pipeline.addLast(handler);
+            }
+
+            // 向EventLoop线程的任务队列提交创建ServerBootstrapAcceptor对象的任务
+            // 这样做的原因是config.handler()返回的对象可能也是一个ChannelInitializer
+            // 添加到链表中的ChannelInitializer的initChannel方法在该initChannel方法返回后才会执行
+            // 而EventLoop队列中的task会在更晚的时间执行，这样可以保证ServerBootstrapAcceptor在所有其他
+            // Handler后面
+            ch.eventLoop().execute(new Runnable() {
+                @Override
+                public void run() {
+                    pipeline.addLast(new ServerBootstrapAcceptor(
+                        ch, currentChildGroup, currentChildHandler, currentChildOptions, currentChildAttrs));
+                }
+            });
+        }
+    });
+}
+```
+
+可以看出，`init`方法主要做了以下工作：
+
+- 将Bootstrap对象的option方法配置的参数配置到Config对象上
+- 将Bootstrap对象的attr方法配置的属性应用到channel对应的attr上
+- 在NioServerSocketChannel的pipline尾部添加了一个ChannelInitializer（ChannelInboundHandlerAdapter的一个子类），ChannelInitialize的initChannel方法会在后续的管道初始化过程中被调用，所以这里先不对initChannel方法进行深入
+
+让我们进入pipline的`addLast`方法的调用链，看看做了哪些操作：
+
+```java
+public final ChannelPipeline addLast(ChannelHandler... handlers) {
+    // 这里的第一个参数为EventExecutorGroup，作用是指定的执行Handler逻辑的线程池
+    // 设为null则表示使用BootStrap中配置的NioEeventLoopGroup线程池
+    return addLast(null, handlers);
+}
+
+public final ChannelPipeline addLast(EventExecutorGroup executor, ChannelHandler... handlers) {
+    if (handlers == null) {
+        throw new NullPointerException("handlers");
+    }
+
+    // 通过for循环中的addLast方法将可变参数中的handler加入pipline
+    for (ChannelHandler h: handlers) {
+        if (h == null) {
+            break;
+        }
+        addLast(executor, null, h);
+    }
+
+    return this;
+}
+
+public final ChannelPipeline addLast(EventExecutorGroup group, String name, ChannelHandler handler) {
+    final AbstractChannelHandlerContext newCtx;
+    synchronized (this) {
+        // 判断handler是不是已经被添加到管道了
+        // 如果已经添加到管道并且handler没有被@shareable注解标识，抛出异常
+        // 将handler已经被添加到管道的标志设置为true
+        checkMultiplicity(handler);
+
+        // 构建HandlerContext对象，并且根据name是否为空校验或者生成handler名字
+        newCtx = newContext(group, filterName(name, handler), handler);
+
+        // 将HandlerContext对象添加到pipeline末尾
+        addLast0(newCtx);
+
+        // 判断管道是否注册到EventLoop
+        if (!registered) {
+            // 将handler的阶段从INIT设置为PENDING
+            newCtx.setAddPending();
+            // 创建一个稍后执行的callHandlerAdded0方法的回调任务
+            callHandlerCallbackLater(newCtx, true);
+            return this;
+        }
+
+        // 如果管道已注册到EventLoop
+        // 如果指定了工作线程池，将callHandlerAdded0的调用封装为task提交到指定的工作线程池
+        EventExecutor executor = newCtx.executor();
+        if (!executor.inEventLoop()) {
+            callHandlerAddedInEventLoop(newCtx, executor);
+            return this;
+        }
+    }
+    
+    // 如果管道已注册到EventLoop并且未指定工作线程池
+    // 则立刻执行callHandlerAdded0方法
+    callHandlerAdded0(newCtx);
+    return this;
+}
+```
+
+可以看到addLast调用链中做了以下工作：
+
+1.
+
+这时候NioServerSocketChannel的pipline的链表结构应该如下：
+
+![](..\images\netty_ctx_link2.png)
 
 
 
