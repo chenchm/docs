@@ -54,7 +54,7 @@ Netty中的通道是对Java原生网络API的封装，其顶层接口为Channel�
 
 由于本文只对NIO进行说明，所以就不对BIO相关的内容进行深入，Netty中NIO相关的Channel类关系图如下：
 
-![netty_nio_channel](E:\notes\mkdocs\projectDocs\docs\images\netty_nio_channel.png)
+![netty_nio_channel](..\images\netty_nio_channel.png)
 
 NioServerSocketChannel和NioSocketChannel中都持有对应的Java NIO Channel的引用，所以NioServerSocketChannel注册到NioEventLoop，实际上就是Java NIO Channel注册到绑定在NioEventLoop上的Selector。二者都继承自AbstractNioChannel，其维护了Netty中的Channel与Java NIO中Channel的对应关系，并提供了`javaChannel()`方法获取对应的Java Channel。
 
@@ -131,7 +131,7 @@ public class NioServerSocketChannel extends AbstractNioMessageChannel
 
 ChannelHanler的类关系图如下：
 
-![netty_channel_hander](E:\notes\mkdocs\projectDocs\docs\images\netty_channel_handler.png)
+![netty_channel_hander](..\images\netty_channel_handler.png)
 
 ChannelHandlerAdapter、ChannelInboundHandlerAdapter 、ChannelOutboundHandlerAdapter是Netty提供的Handler骨架类已经实现了大部分骨架方法，对于不同的需求你只要相应的Handler并重写自己感兴趣的方法即可。这里再简单介绍一下SimpleChannelInboundHandler和ChannelInitializer这两个类：
 
@@ -605,10 +605,6 @@ void init(Channel channel) throws Exception {
             }
 
             // 向EventLoop线程的任务队列提交创建ServerBootstrapAcceptor对象的任务
-            // 这样做的原因是config.handler()返回的对象可能也是一个ChannelInitializer
-            // 添加到链表中的ChannelInitializer的initChannel方法在该initChannel方法返回后才会执行
-            // 而EventLoop队列中的task会在更晚的时间执行，这样可以保证ServerBootstrapAcceptor在所有其他
-            // Handler后面
             ch.eventLoop().execute(new Runnable() {
                 @Override
                 public void run() {
@@ -625,7 +621,7 @@ void init(Channel channel) throws Exception {
 
 - 将Bootstrap对象的option方法配置的参数配置到Config对象上
 - 将Bootstrap对象的attr方法配置的属性应用到channel对应的attr上
-- 在NioServerSocketChannel的pipline尾部添加了一个ChannelInitializer（ChannelInboundHandlerAdapter的一个子类），ChannelInitialize的initChannel方法会在后续的管道初始化过程中被调用，所以这里先不对initChannel方法进行深入
+- 调用addLast方法在NioServerSocketChannel的pipline尾部添加了一个ChannelInitializer（ChannelInboundHandlerAdapter的一个子类），ChannelInitialize的initChannel方法会在后续的管道初始化过程中被调用，所以这里先不对initChannel方法进行深入
 
 让我们进入pipline的`addLast`方法的调用链，看看做了哪些操作：
 
@@ -655,9 +651,7 @@ public final ChannelPipeline addLast(EventExecutorGroup executor, ChannelHandler
 public final ChannelPipeline addLast(EventExecutorGroup group, String name, ChannelHandler handler) {
     final AbstractChannelHandlerContext newCtx;
     synchronized (this) {
-        // 判断handler是不是已经被添加到管道了
-        // 如果已经添加到管道并且handler没有被@shareable注解标识，抛出异常
-        // 将handler已经被添加到管道的标志设置为true
+        // 校验handler信息
         checkMultiplicity(handler);
 
         // 构建HandlerContext对象，并且根据name是否为空校验或者生成handler名字
@@ -676,30 +670,793 @@ public final ChannelPipeline addLast(EventExecutorGroup group, String name, Chan
         }
 
         // 如果管道已注册到EventLoop
-        // 如果指定了工作线程池，将callHandlerAdded0的调用封装为task提交到指定的工作线程池
+        // 因为ctx中executor对象为空，所以这里的exector是Channel持有的EventLoop对象
         EventExecutor executor = newCtx.executor();
+        // 如果当前线程不是EventLoop的工作线程
         if (!executor.inEventLoop()) {
+            // 将callHandlerAdded0的调用封装为task提交到指定的工作线程池
             callHandlerAddedInEventLoop(newCtx, executor);
             return this;
         }
     }
     
-    // 如果管道已注册到EventLoop并且未指定工作线程池
+    // 如果当前线程是EventLoop的工作线程
     // 则立刻执行callHandlerAdded0方法
     callHandlerAdded0(newCtx);
     return this;
 }
 ```
 
-可以看到addLast调用链中做了以下工作：
+可以看到addLast对handler主要做了以下工作：
 
-1.
+- 对handler信息进行校验
 
-这时候NioServerSocketChannel的pipline的链表结构应该如下：
+```java
+private static void checkMultiplicity(ChannelHandler handler) {
+    // 如果handler是ChannelHandlerAdapter的子类
+    if (handler instanceof ChannelHandlerAdapter) {
+        ChannelHandlerAdapter h = (ChannelHandlerAdapter) handler;
+        
+        // 判断handler是不是已经被添加到管道了
+        // 如果已经添加到管道并且handler没有被@shareable注解标识，抛出异常
+        if (!h.isSharable() && h.added) {
+            throw new ChannelPipelineException(
+                h.getClass().getName() +
+                " is not a @Sharable handler, so can't be added or removed multiple times.");
+        }
+        // 将handler已经被添加到管道的标志设置为true
+        h.added = true;
+    }
+}
+```
+
+- 调用newContext方法，将handler包装成AbstractChannelHandlerContext对象
+- 调用addLast0将构建的AbstractChannelHandlerContext加入pipline双向链表尾部
+
+```java
+private void addLast0(AbstractChannelHandlerContext newCtx) {
+    AbstractChannelHandlerContext prev = tail.prev;
+    newCtx.prev = prev;
+    newCtx.next = tail;
+    prev.next = newCtx;
+    tail.prev = newCtx;
+}
+```
+
+- 接下来就是分情况进行callHandlerAdded0方法的调用，如果NioServerSocketChannel未注册到EventLoop则调用callHandlerCallbackLater方法创建一个稍后被执行的Task；如果NioServerSocketChannel已经注册到EventLoop，并且如果当前线程不是EventLoop的工作线程，则callHandlerAdded0方法会提交到线程池中被执行；如果NioServerSocketChannel已经注册到EventLoop并且当前线程是EventLoop的工作线程，则使用当前线程执行callHandlerAdded0方法。显然这时候NioServerSocketChannel还未注册到EventLoop，所以让我们接着进入callHandlerCallbackLater方法。
+
+````java
+private void callHandlerCallbackLater(AbstractChannelHandlerContext ctx, boolean added) {
+    assert !registered;
+
+    // 根据调用传入的参数，这里显然是新建一个PendingHandlerAddedTask对象
+    PendingHandlerCallback task = added ? new PendingHandlerAddedTask(ctx) : new PendingHandlerRemovedTask(ctx);
+    // 获得PendingHandlerCallback链表的头结点，PendingHandlerCallback链表是一个单向链表
+    PendingHandlerCallback pending = pendingHandlerCallbackHead;
+    // 如果链表为空则将新的Task作为链表头，否则将Task插入链表尾部
+    if (pending == null) {
+        pendingHandlerCallbackHead = task;
+    } else {
+        // Find the tail of the linked-list.
+        while (pending.next != null) {
+            pending = pending.next;
+        }
+        pending.next = task;
+    }
+}
+
+// PendingHandlerAddedTask实现了Runnable和PendingHandlerCallback类的execute抽象方法
+// 两个方法的目的都是执行callHandlerAdded0方法
+private final class PendingHandlerAddedTask extends PendingHandlerCallback {
+    PendingHandlerAddedTask(AbstractChannelHandlerContext ctx) {
+        super(ctx);
+    }
+
+    @Override
+    public void run() {
+        callHandlerAdded0(ctx);
+    }
+
+    @Override
+    void execute() {
+        EventExecutor executor = ctx.executor();
+        if (executor.inEventLoop()) {
+            callHandlerAdded0(ctx);
+        } else {
+            try {
+                    executor.execute(this);
+                } catch (RejectedExecutionException e) {
+                    ...
+                }
+        }
+    }
+}
+````
+
+该方法只是在PendingHandlerCallback链表中加入了一个新的PendingHandlerAddedTask而没有执行callHandlerAdded0方法，该方法调用的时机会在下文阐述。
+
+自此addLast方法的调用链分析完成，这时候NioServerSocketChannel的pipline的链表结构应该如下：
 
 ![](..\images\netty_ctx_link2.png)
 
+#### 将NioServerSocketChannel注册到EventLoop
 
+初始化管道的工作完成后，接下来就是调用`config().group().register(channel)`进行Channel的注册工作了。这里的group方法返回的是MultithreadEventLoopGroup对象，该对象的register方法如下：
+
+```java
+public ChannelFuture register(Channel channel) {
+    return next().register(channel);
+}
+```
+
+MultithreadEventLoopGroup对象的register可以被分为两个部分：
+
+- 调用next方法会使用选择器返回一个EventLoop对象
+
+```java
+// MultithreadEventLoopGroup.java
+public EventLoop next() {
+    return (EventLoop) super.next();
+}
+
+// MultithreadEventExecutorGroup.java
+public EventExecutor next() {
+    return chooser.next();
+}
+
+// GenericEventExecutorChooser
+public EventExecutor next() {
+    // 使用idx对线程池长度进行取模，这样Channel被平均分配到线程池的线程上
+    return executors[Math.abs(idx.getAndIncrement() % executors.length)];
+}
+```
+
+- 调用SingleThreadEventLoop的register方法来注册Channel
+
+```java
+public ChannelFuture register(Channel channel) {
+    return register(new DefaultChannelPromise(channel, this));
+}
+
+public ChannelFuture register(final ChannelPromise promise) {
+    ObjectUtil.checkNotNull(promise, "promise");
+    // 调用Channel的AbstractUnsafe对象的register方法来注册管道
+    promise.channel().unsafe().register(this, promise);
+    return promise;
+}
+```
+
+可以看出SingleThreadEventLoop的register方法最构建一个DefaultChannelPromise对象，DefaultChannelPromise对象是一个用来存储异步任务结果并作为异步任务观察者的实例；终会调用Channel的Unsafe对象的register方法来注册管道，所以让我们继续进入AbstractUnsafe对象的register方法：
+
+```java
+public final void register(EventLoop eventLoop, final ChannelPromise promise) {
+    // 一些校验工作
+    ...
+
+    // AbstractUnsafe是AbstractChannel的一个内部类
+    // 所以用AbstractChannel.this.eventLoop来指定当前的eventLoop
+    AbstractChannel.this.eventLoop = eventLoop;
+
+    // 判断当前线程是不是传入的EventLoop对象的工作线程
+    if (eventLoop.inEventLoop()) {
+        // 如果是就直接执行register0
+        register0(promise);
+    } else {
+        try {
+            // 如果不是则将register0作为一个Task放入eventLoop的任务队列
+            eventLoop.execute(new Runnable() {
+                @Override
+                public void run() {
+                    register0(promise);
+                }
+            });
+        } catch (Throwable t) {
+            logger.warn(
+                "Force-closing a channel whose registration task was not accepted by an event loop: {}",
+                AbstractChannel.this, t);
+            closeForcibly();
+            closeFuture.setClosed();
+            safeSetFailure(promise, t);
+        }
+    }
+}
+```
+
+可以看到register方法主要做了两件事，首先设置当前Channel的EventLoop，然后根据当前线程是否是EventLoop中的工作线程来决定如何执行register0方法，毋庸置疑在整个Service服务起来的过程中执行线程是主线程，所以这里的register0方法会在EventLoop的工作队列中等待执行，也就是说register0方法中所有的逻辑都是由EventLoop的工作线程来完成的。任务在何时开始执行与Netty线程模型有关，这里我们暂时不进行深入，先进入异步执行的register0方法：
+
+```java
+private void register0(ChannelPromise promise) {
+    try {
+        if (!promise.setUncancellable() || !ensureOpen(promise)) {
+            return;
+        }
+        boolean firstRegistration = neverRegistered;
+        // 将Java Channel注册到Selector
+        doRegister();
+        // 将从未注册字段设置为false
+        neverRegistered = false;
+        // 将已经注册变量设置为true
+        registered = true;
+
+        // 在通知监听器之前执行PendingHandlerCallback链中callback的逻辑
+        pipeline.invokeHandlerAddedIfNeeded();
+
+        // 将Promise的中执行结果标记为SUCCESS，并通知所有的监听器执行任务
+        safeSetSuccess(promise);
+        // 调用pipline的fireChannelRegistered，执行管道注册完成的逻辑
+        pipeline.fireChannelRegistered();
+       	
+        // 如果Java Channel处于绑定状态
+        if (isActive()) {
+            // 如果是第一次进行注册
+            if (firstRegistration) {
+                // 调用pipline的fireChannelActive，执行管道激活完成的完成的逻辑
+                pipeline.fireChannelActive();
+            } else if (config().isAutoRead()) {
+                beginRead();
+            }
+        }
+    } catch (Throwable t) {
+        // Close the channel directly to avoid FD leak.
+        closeForcibly();
+        closeFuture.setClosed();
+        safeSetFailure(promise, t);
+    }
+}
+```
+
+register0方法是Netty初始过程中比较核心的代码，主要可以分成以下几块逻辑：
+
+- 调用doRegister将Java Channel注册到Selector
+
+```java
+protected void doRegister() throws Exception {
+    boolean selected = false;
+    for (;;) {
+        try {
+            selectionKey = javaChannel().register(eventLoop().unwrappedSelector(), 0, this);
+            return;
+        } catch (CancelledKeyException e) {
+            if (!selected) {
+                eventLoop().selectNow();
+                selected = true;
+            } else {
+                throw e;
+            }
+        }
+    }
+}
+```
+
+将doRegister方法中将Java Channel（这里是ServerSocketChannel）注册到了EventLoop的Selector上，可以注意到这里注册的事件是0，即不监听任何事件，监听的事件将在后续进行注册，下文将会提到；为什么要用死循环的原因目前我并不太明白。。。
+
+- 将registered标记字段设置为true，表明该Channel已经完成了注册
+- 调用` pipeline.invokeHandlerAddedIfNeeded()`，该方法会执行之前在pipline的addLast方法中进行过说明的PendingHandlerCallback链中所有的Task的execute方法，也就是说callHandlerAdded0方法将在这里进行调用。
+
+```java
+final void invokeHandlerAddedIfNeeded() {
+    // 由于register0方法是由EventLoop中的工作线程执行的
+    // 所以当前线程必须是EventLoop中的工作线程，这里进行一次判断校验
+    assert channel.eventLoop().inEventLoop();
+    if (firstRegistration) {
+        // firstRegistration属性的值修改为false
+        firstRegistration = false;
+        // 执行回调逻辑
+        callHandlerAddedForAllHandlers();
+    }
+}
+
+private void callHandlerAddedForAllHandlers() {
+    final PendingHandlerCallback pendingHandlerCallbackHead;
+    synchronized (this) {
+        assert !registered;
+	   	// 修改pipline的registered属性的值为true
+        registered = true;
+
+        // 获得链表的头结点
+        pendingHandlerCallbackHead = this.pendingHandlerCallbackHead;
+        this.pendingHandlerCallbackHead = null;
+    }
+
+    // 从头结点开始沿着回调链执行回调的execute方法
+    PendingHandlerCallback task = pendingHandlerCallbackHead;
+    while (task != null) {
+        task.execute();
+        task = task.next;
+    }
+}
+```
+
+由上述流程可以知道invokeHandlerAddedIfNeeded最终将会执行PendingHandlerCallback链中所有的task的execute方法，所以之前通过pipline的addLast方法最终添加到链中的PendingHandlerAddedTask对象的execute方法也在此时被执行，让我们回到PendingHandlerAddedTask的execute方法：
+
+```java
+void execute() {
+    // 因为ctx中executor对象为空，所以这里的exector是Channel持有的EventLoop对象
+    EventExecutor executor = ctx.executor();
+    // 判断当前线程是不是executor的工作线程
+    if (executor.inEventLoop()) {
+        // 直接执行callHandlerAdded0方法
+        callHandlerAdded0(ctx);
+    } else {
+        try {
+            // 把自己作为task提交，也就是会在稍后执行自身的run方法
+            // run方法中也是执行的callHandlerAdded0方法
+            executor.execute(this);
+        } catch (RejectedExecutionException e) {
+            if (logger.isWarnEnabled()) {
+                logger.warn(
+                    "Can't invoke handlerAdded() as the EventExecutor {} rejected it, removing handler {}.",
+                    executor, ctx.name(), e);
+            }
+            remove0(ctx);
+            ctx.setRemoved();
+        }
+    }
+}
+
+public void run() {
+    callHandlerAdded0(ctx);
+}
+```
+
+由之前对AbstractUnsafe对象的register方法分析可知，AbstractUnsafe对象的register0方法是由EventLoop中的工作线程去执行的，所以register0中所有的逻辑都由EventLoop中的工作线程来完成，因此`executor.inEventLoop()`得到的结果为true，所以接下将直接执行DefaultChannelPipline的callHandlerAdded0方法：
+
+```java
+private void callHandlerAdded0(final AbstractChannelHandlerContext ctx) {
+    try {
+        ctx.callHandlerAdded();
+    } catch (Throwable t) {
+        // 错误处理逻辑
+        ...
+    }
+}
+```
+
+目前我们只在ServerBootstrap的`init`方法中在链表末尾添加了一个添加了一个ChannelInitializer，所以这里的HandlerContext就是封装ChannelInitializer的HandlerContext。接着进入HandlerContext的callHandlerAdded方法：
+
+```java
+final void callHandlerAdded() throws Exception {
+   	// 将Handler的状态修改为ADD_COMPLETE
+    if (setAddComplete()) {
+        // 通过handler方法获得context中的handler，并且调用handler的handlerAdded方法
+        handler().handlerAdded(this);
+    }
+}
+```
+
+很显然这里的handler方法获得的就是ChannelInitializer对象，接着进入ChannelInitializer的handlerAdded方法：
+
+```java
+public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
+    // 如果管道已经完成注册，即registered标记为true
+    if (ctx.channel().isRegistered()) {
+        if (initChannel(ctx)) {
+		   // 做一些后续的处理
+            removeState(ctx);
+        }
+    }
+}
+
+private boolean initChannel(ChannelHandlerContext ctx) throws Exception {
+    // 保证一个context只会被执行一次
+    if (initMap.add(ctx)) { 
+        try {
+            // 执行由子类实现的initChannel方法
+            initChannel((C) ctx.channel());
+        } catch (Throwable cause) {
+            // 调用Handler的异常处理方法
+            exceptionCaught(ctx, cause);
+        } finally {
+            // 最后将ChannelInitializer从pipline中删除
+            ChannelPipeline pipeline = ctx.pipeline();
+            if (pipeline.context(this) != null) {
+                pipeline.remove(this);
+            }
+        }
+        return true;
+    }
+    return false;
+}
+```
+
+最终handlerAdded会调用子类实现的initChannel方法，现在我们回过头来看被添加到pipeline的ChannelInitializer实现的initChannel方法：
+
+```java
+p.addLast(new ChannelInitializer<Channel>() {
+    @Override
+    public void initChannel(final Channel ch) throws Exception {
+        final ChannelPipeline pipeline = ch.pipeline();
+        // 在pipline中添加通过Bootstrap对象的handler配置的Handler
+        ChannelHandler handler = config.handler();
+        if (handler != null) {
+            pipeline.addLast(handler);
+        }
+
+        // 向EventLoop线程的任务队列提交创建ServerBootstrapAcceptor对象的任务
+        ch.eventLoop().execute(new Runnable() {
+            @Override
+            public void run() {
+                pipeline.addLast(new ServerBootstrapAcceptor(
+                    ch, currentChildGroup, currentChildHandler, currentChildOptions, currentChildAttrs));
+            }
+        });
+    }
+});
+```
+
+initChannel方法只做了两件事，一是将在Bootstrap对象的handler方法中配置的Handler加入到pipeline中，由于我们并没有配置Handler所以这一步没有添加Handler；二是将添加ServerBootstrapAcceptor对象到pipeline的工作交给Channel的EventLoop来处理。这里这么做的原因是，要保证如果config中Handler也是ChannelInitializer时，ChannelInitializer配置的Handler会在ServerBootstrapAcceptor之前，那为什么能保证呢？
+
+我是这样认为的，之前在addLast方法中分析过，addLast执行callHandlerAdded0方法，就是最终执行ChannelInitializer的initChannel方法的可能性有三种，其中一种的条件是pipeline的register属性为false，此时register已经被设置为true所以不考虑这种可能性；但是存在当前线程与EventLoop的工作线程不是同一个线程的情况，callHandlerAdded0方法可能被直接执行，这种情况是可以保证先后顺序的，但也可能被放入EventLoop的任务队列中去执行，所以为了保证ServerBootstrapAcceptor在pipeline的末尾，需要将添加ServerBootstrapAcceptor工作加入到任务队列中去。
+
+这里对ServerBootstrapAcceptor进行一个简单的说明，ServerBootstrapAcceptor实现了ChannelInboundHandlerAdapter接口负责监听连接请求，在完成连接以后会创建一个NioSocketChannel来表示客户端连接，NioSocketChanne会被l注册到workerGroup，用于监听IO读写请求。
+
+在调用完子类的initChannel方法之后，在finally块中最后会从piplien中将ChannelInitializer移除，至此invokeHandlerAddedIfNeeded()方法的整个调用流程就结束了，pipeline链表的结构如下：
+
+![ctx_link3](..\images\netty_ctx_link3.png)
+
+- 调用safeSetSuccess方法，调用链如下：
+
+```java
+protected final void safeSetSuccess(ChannelPromise promise) {
+    if (!(promise instanceof VoidChannelPromise) && !promise.trySuccess()) {
+        logger.warn("Failed to mark a promise as success because it is done already: {}", promise);
+    }
+}
+
+public boolean trySuccess() {
+    return trySuccess(null);
+}
+
+public boolean trySuccess(V result) {
+    if (setSuccess0(result)) {
+        notifyListeners();
+        return true;
+    }
+    return false;
+}
+```
+
+该方法的主要逻辑就是将DefaultPromise对象的结果设置为SUCCESS并且通知所有的监听器执行operationComplete方法，这里就不深入具体的逻辑了。
+
+- pipeline的fireChannelRegistered方法会依次调用pipleline中的双向链表中的InboundHandler的channelRegistered()方法，执行管道注册完成的逻辑，这里也不继续进行展开。
+- 最后，如果Java Channel处于绑定状态，通过pipeline.fireChannelActive()方法依次调用pipleline中的双向链表中的InboundHandler的channelActive()方法，执行管道激活完成的逻辑，但是这时候管道还未绑定所以不会执行这里的逻辑。
+
+这样register0方法的调用就结束了，然而因为register0是一个异步调用过程所以实际上调用register0的register方法早就返回了，随着register方法早就返回initAndRegister方法的调用也结束了并且返回了存放register0这个异步调用结果的DefaultPromise对象，让我们回到ServerBootstrap的doBind方法中：
+
+```java
+private ChannelFuture doBind(final SocketAddress localAddress) {
+    // 创建接受连接请求的Channel并注册到NioEventLoop的Selector
+    final ChannelFuture regFuture = initAndRegister();
+    final Channel channel = regFuture.channel();
+    if (regFuture.cause() != null) {
+        return regFuture;
+    }
+
+    // 判断操作是否完成
+    if (regFuture.isDone()) {
+        ChannelPromise promise = channel.newPromise();
+        // 如果操作完成调用doBind0方法
+        doBind0(regFuture, channel, localAddress, promise);
+        return promise;
+    } else {
+        final PendingRegistrationPromise promise = new PendingRegistrationPromise(channel);
+        // 如果操作还未完成则添加监听器，在完成后判断操作是否失败，如果未失败则继续调用doBind0方法
+        regFuture.addListener(new ChannelFutureListener() {
+            @Override
+            public void operationComplete(ChannelFuture future) throws Exception {
+                Throwable cause = future.cause();
+                if (cause != null) {
+                    promise.setFailure(cause);
+                } else {
+                    promise.registered();
+                    doBind0(regFuture, channel, localAddress, promise);
+                }
+            }
+        });
+        return promise;
+    }
+}
+```
+
+在initAndRegister方法返回后，通过DefaultPromise的isDone方法判断一次register0方法是否完成了调用，如果完成则直接调用doBind0方法，如果没有完成添加一个监听器去等待任务完成后继续执行doBind0方法，之前分析过监听器会在safeSetSuccess中被通知。因此无论如何，最终都会调用doBind0方法：
+
+```java
+private static void doBind0(
+    final ChannelFuture regFuture, final Channel channel,
+    final SocketAddress localAddress, final ChannelPromise promise) {
+	// 在触发channelRegistered之前调用此方法
+    // 使用户处理程序有机会在其channelRegistered实现中设置管道
+    channel.eventLoop().execute(new Runnable() {
+        @Override
+        public void run() {
+            if (regFuture.isSuccess()) {
+                channel.bind(localAddress, promise).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
+            } else {
+                promise.setFailure(regFuture.cause());
+            }
+        }
+    });
+}
+```
+
+该方法直接调用了AbstractChannel的bind方法，调用链如下：
+
+```java
+public ChannelFuture bind(SocketAddress localAddress, ChannelPromise promise) {
+    return pipeline.bind(localAddress, promise);
+}
+
+public final ChannelFuture bind(SocketAddress localAddress, ChannelPromise promise) {
+    // 调用了TailContext的bind方法
+    return tail.bind(localAddress, promise);
+}
+
+public ChannelFuture bind(final SocketAddress localAddress, final ChannelPromise promise) {
+    if (localAddress == null) {
+        throw new NullPointerException("localAddress");
+    }
+    if (isNotValidPromise(promise, false)) {
+        return promise;
+    }
+
+    // 找到上一个outbound
+    final AbstractChannelHandlerContext next = findContextOutbound();
+    EventExecutor executor = next.executor();
+    // 执行AbstractChannelHandlerContext的invokeBind
+    if (executor.inEventLoop()) {
+        next.invokeBind(localAddress, promise);
+    } else {
+        safeExecute(executor, new Runnable() {
+            @Override
+            public void run() {
+                next.invokeBind(localAddress, promise);
+            }
+        }, promise, null);
+    }
+    return promise;
+}
+```
+
+通过findContextOutbound找到pipeline链表中的上一个持有实现了ChannelOutboundHandler接口的Handler对象的AbstractChannelHandlerContext对象，findContextOutbound方法如下：
+
+```java
+private AbstractChannelHandlerContext findContextOutbound() {
+    AbstractChannelHandlerContext ctx = this;
+    do {
+        ctx = ctx.prev;
+    } while (!ctx.outbound);
+    return ctx;
+}
+```
+
+目前的pipeline链表如下：
+
+![ctx_link3](..\images\netty_ctx_link3.png)
+
+所以这里找到的AbstractChannelHandlerContext为HeadContext，最终会进入TailContext的bind方法，调用链如下：
+
+```java
+public void bind(
+    ChannelHandlerContext ctx, SocketAddress localAddress, ChannelPromise promise) {
+    // 由于TailContext是pipeline的内部类，所以这里调用了pipeline的unsafe的bind方法
+    unsafe.bind(localAddress, promise);
+}
+
+public final void bind(final SocketAddress localAddress, final ChannelPromise promise) {
+    assertEventLoop();
+
+    if (!promise.setUncancellable() || !ensureOpen(promise)) {
+        return;
+    }
+
+    if (Boolean.TRUE.equals(config().getOption(ChannelOption.SO_BROADCAST)) &&
+        localAddress instanceof InetSocketAddress &&
+        !((InetSocketAddress) localAddress).getAddress().isAnyLocalAddress() &&
+        !PlatformDependent.isWindows() && !PlatformDependent.maybeSuperUser()) {
+        logger.warn(
+            "A non-root user can't receive a broadcast packet if the socket " +
+            "is not bound to a wildcard address; binding to a non-wildcard " +
+            "address (" + localAddress + ") anyway as requested.");
+    }
+
+    boolean wasActive = isActive();
+    try {
+        // 绑定Java Channel到指定的端口
+        doBind(localAddress);
+    } catch (Throwable t) {
+        safeSetFailure(promise, t);
+        closeIfClosed();
+        return;
+    }
+
+    // 如果Java Channel之前是未绑定的，现在完成了绑定则执行fireChannelActive逻辑
+    if (!wasActive && isActive()) {
+        // 在Channel的EventLoop的任务队列将pipeline.fireChannelActive()方法作为任务提交
+        invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                pipeline.fireChannelActive();
+            }
+        });
+    }
+
+    safeSetSuccess(promise);
+}
+```
+
+这里有很重要的两步逻辑，一是通过doBind方法将Java Channel绑定到对应的端口；然后在绑定之后接着调用fireChannelActive方法，开始管道激活的逻辑。
+
+由于这里的Channel类是NioServerSocketChannel，所以进入NioServerSocketChannel的doBind方法：
+
+```java
+protected void doBind(SocketAddress localAddress) throws Exception {
+    if (PlatformDependent.javaVersion() >= 7) {
+        javaChannel().bind(localAddress, config.getBacklog());
+    } else {
+        javaChannel().socket().bind(localAddress, config.getBacklog());
+    }
+}
+```
+
+这里就回到了Java NIO的API，根据JDK版本实现Java Channel的绑定：
+
+- `>=`7，调用ServerSocketChannel.bind(SocketAddress，config.getBacklog())
+- 否则，调用ServerSocketChannel.socket().bind(SocketAddress，config.getBacklog())
+
+完成绑定后，稍后调用`pipeline.fireChannelActive()`方法触发管道激活事件：
+
+```java
+public final ChannelPipeline fireChannelActive() {
+    // 以HeadContext作为链表的开端触发pipeline的激活方法
+    AbstractChannelHandlerContext.invokeChannelActive(head);
+    return this;
+}
+
+static void invokeChannelActive(final AbstractChannelHandlerContext next) {
+    EventExecutor executor = next.executor();
+    if (executor.inEventLoop()) {
+        next.invokeChannelActive();
+    } else {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                next.invokeChannelActive();
+            }
+        });
+    }
+}
+```
+
+fireChannelActive方法将HeadContext作为参数调用了invokeChannelActive方法，因此最终将调用HeadContext的invokeChannelActive方法：
+
+```java
+private void invokeChannelActive() {
+    if (invokeHandler()) {
+        try {
+            // HeadContext的handler方法返回的HeadContext自身
+            // 所以将继续调用HeadContext的channelActive方法
+            ((ChannelInboundHandler) handler()).channelActive(this);
+        } catch (Throwable t) {
+            notifyHandlerException(t);
+        }
+    } else {
+        fireChannelActive();
+    }
+}
+```
+
+由于HeadContext的handler方法返回的HeadContext自身，所以将继续调用HeadContext的channelActive方法：
+
+```java
+public void channelActive(ChannelHandlerContext ctx) {
+    // 将激活事件传递给链表中的其他HandlerContext
+    ctx.fireChannelActive();
+
+    readIfIsAutoRead();
+}
+```
+
+HeadContext会首先将激活事件传递给链表中的其他HandlerContext，由于其他Context中没有特别重要的激活事件的逻辑，这里就不进行深入了。接下来继续执行readIfIsAutoRead方法，逻辑如下：
+
+```java
+private void readIfIsAutoRead() {
+    if (channel.config().isAutoRead()) {
+        channel.read();
+    }
+}
+
+public Channel read() {
+    pipeline.read();
+    return this;
+}
+
+public final ChannelPipeline read() {
+    tail.read();
+    return this;
+}
+
+public ChannelHandlerContext read() {
+    final AbstractChannelHandlerContext next = findContextOutbound();
+    EventExecutor executor = next.executor();
+    if (executor.inEventLoop()) {
+        next.invokeRead();
+    } else {
+        Runnable task = next.invokeReadTask;
+        if (task == null) {
+            next.invokeReadTask = task = new Runnable() {
+                @Override
+                public void run() {
+                    next.invokeRead();
+                }
+            };
+        }
+        executor.execute(task);
+    }
+
+    return this;
+}
+```
+
+可以看出，read方法的调用链和bind方法的调用链大同小异，也是通过TailContext往前寻找持有实现了ChannelOutboundHandler接口的Handler对象的AbstractChannelHandlerContext对象，在当前链表中只能找到HeadContext，因此接下来将执行HeadContext的read方法，如下：
+
+```java
+public void read(ChannelHandlerContext ctx) {
+    unsafe.beginRead();
+}
+
+// AbstractUnsafe
+public final void beginRead() {
+    assertEventLoop();
+
+    if (!isActive()) {
+        return;
+    }
+
+    try {
+        doBeginRead();
+    } catch (final Exception e) {
+        invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                pipeline.fireExceptionCaught(e);
+            }
+        });
+        close(voidPromise());
+    }
+}
+
+// AbstractNioMessageChannel
+protected void doBeginRead() throws Exception {
+    if (inputShutdown) {
+        return;
+    }
+    super.doBeginRead();
+}
+
+// AbstractNioChannel
+protected void doBeginRead() throws Exception {
+    // 这里的selectionKey就是之前初始化NioServerSocketChannel时设置的SelectionKey.OP_ACCEPT
+    final SelectionKey selectionKey = this.selectionKey;
+    if (!selectionKey.isValid()) {
+        return;
+    }
+
+    readPending = true;
+
+    final int interestOps = selectionKey.interestOps();
+    if ((interestOps & readInterestOp) == 0) {
+        selectionKey.interestOps(interestOps | readInterestOp);
+    }
+}
+```
+
+根据调用调用链可知最后将调用AbstractNioChannel的doBeginRead方法，其中的readInterestOp就是之前的SelectionKey.OP_ACCEPT的值，又回到了Java NIO的API，通过selectionKey .interestOps()注册一个ACCEPT事件。到这里整个`ServerBootstrap.bind`的逻辑就完成了，接受连接请求的管道也初始化和创建了。
+
+## IO读写管道的创建和数据的出站入站
+
+要开始做交接工作了，后续有时间在把这边的分析补上。
+
+<====To be continue...
 
 ## Ref
 
